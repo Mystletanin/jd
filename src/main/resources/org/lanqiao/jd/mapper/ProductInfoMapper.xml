@@ -1,0 +1,409 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="org.lanqiao.jd.mapper.ProductInfoMapper" >
+  <resultMap id="ProductInfoResultMap" type="org.lanqiao.jd.entity.ProductInfo" >
+    <id column="product_id" property="productId" jdbcType="INTEGER" />
+    <result column="product_name" property="productName" jdbcType="VARCHAR" />
+    <result column="brand_id" property="brandId" jdbcType="INTEGER" />
+    <result column="one_category_id" property="oneCategoryId" jdbcType="SMALLINT" />
+    <result column="two_category_id" property="twoCategoryId" jdbcType="SMALLINT" />
+    <result column="three_category_id" property="threeCategoryId" jdbcType="SMALLINT" />
+    <result column="price" property="price" jdbcType="DECIMAL" />
+    <result column="sales_volume" property="salesVolume" jdbcType="INTEGER" />
+    <result column="advertising_fees" property="advertisingFees" jdbcType="INTEGER" />
+    <result column="descript" property="descript" jdbcType="LONGVARCHAR" />
+    <result column="num" property="num" javaType="INTEGER" />
+    <result column="count" property="count" javaType="INTEGER" />
+    <association property="productCategory" resultMap="ProductCategoryResultMap"></association>
+    <association property="productPicInfo" resultMap="ProductPicInfoResultMap"></association>
+    <association property="brandInfo" resultMap="BrandInfoResultMap"></association>
+    <collection property="productCommentList" resultMap="ProductCommentResultMap"></collection>
+    <collection property="productCategoryList" resultMap="ProductCategoryResultMap"></collection>
+  </resultMap>
+  <resultMap id="ProductPicInfoResultMap" type="org.lanqiao.jd.entity.ProductPicInfo" >
+    <id column="product_pic_id" property="productPicId" jdbcType="INTEGER" />
+    <result column="product_id" property="productId" jdbcType="INTEGER" />
+    <result column="pic_url" property="picUrl" jdbcType="VARCHAR" />
+    <result column="is_master" property="isMaster" jdbcType="TINYINT" />
+  </resultMap>
+  <resultMap id="ResultMapWithBLOBs" type="org.lanqiao.jd.entity.ProductInfo" extends="ProductInfoResultMap" >
+  </resultMap>
+  <resultMap id="BrandInfoResultMap" type="org.lanqiao.jd.entity.BrandInfo" >
+    <id column="brand_id" property="brandId" jdbcType="INTEGER" />
+    <result column="brand_name" property="brandName" jdbcType="VARCHAR" />
+    <result column="brand_web" property="brandWeb" jdbcType="VARCHAR" />
+    <result column="brand_logo" property="brandLogo" jdbcType="VARCHAR" />
+    <result column="brand_desc" property="brandDesc" jdbcType="VARCHAR" />
+  </resultMap>
+  <resultMap id="ProductCommentResultMap" type="org.lanqiao.jd.entity.ProductComment" >
+    <id column="comment_id" property="commentId" jdbcType="INTEGER" />
+    <result column="product_id" property="productId" jdbcType="INTEGER" />
+    <result column="order_id" property="orderId" jdbcType="INTEGER" />
+    <result column="customer_id" property="customerId" jdbcType="INTEGER" />
+    <result column="content" property="content" jdbcType="VARCHAR" />
+    <result column="audit_time" property="auditTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <resultMap id="ProductCategoryResultMap" type="org.lanqiao.jd.entity.ProductCategory" >
+    <id column="category_id" property="categoryId" jdbcType="SMALLINT" />
+    <result column="category_name" property="categoryName" jdbcType="VARCHAR" />
+    <result column="parent_id" property="parentId" jdbcType="SMALLINT" />
+    <result column="category_level" property="categoryLevel" jdbcType="TINYINT" />
+  </resultMap>
+<!--  and product_name= #{productName,jdbcType=VARCHAR}-->
+<!--  like concat(concat('%',#{productName}),'%')-->
+<!--  查询产品价格-->
+  <select id="selectPrice" resultType="java.lang.String" parameterType="java.lang.Integer">
+select price from product_info where product_id=#{productId}
+  </select>
+<!--  韩商品详情-->
+  <select id="selectOne" resultMap="ProductInfoResultMap" parameterType="java.lang.Integer">
+    select
+    PI.product_name,PI.one_category_id, PI.two_category_id, PI.three_category_id, PI.price,PC.category_name
+    from product_info PI,product_category PC
+    where product_id= #{productId,jdbcType=INTEGER} and PI.one_category_id=PC.category_id;
+  </select>
+  <select id="selectTwo" resultMap="ProductInfoResultMap" parameterType="java.lang.Integer">
+    select
+    PC.category_name
+    from product_info PI,product_category PC
+    where product_id= #{productId,jdbcType=INTEGER} and PI.two_category_id=PC.category_id;
+  </select>
+  <select id="selectThree" resultMap="ProductInfoResultMap" parameterType="java.lang.Integer">
+    select
+    PC.category_name
+    from product_info PI,product_category PC
+    where product_id= #{productId,jdbcType=INTEGER} and PI.three_category_id=PC.category_id;
+  </select>
+  <select id="selectBrand" resultType="java.lang.String" parameterType="java.lang.Integer">
+   select
+   brand_name
+   from brand_info
+   where brand_id=(select brand_id from product_info where product_id=#{productId})
+  </select>
+  <!-- 页面显示 广告信息 -->
+  <select id="getProductListAds" resultMap="ProductInfoResultMap">
+    select t1.*,t2.num
+    from(
+    select p.product_id,p.advertising_fees,p.price,p.product_name,p.descript,b.brand_name,pic.pic_url
+    from product_info p,product_pic_info pic,brand_info b
+    where p.product_id = pic.product_id
+    and p.brand_id = b.brand_id
+    ORDER BY product_id ) t1
+    left JOIN
+   (select count(*) as num,p.product_id
+    from product_info p,product_comment pc
+    where pc.product_id = p.product_id
+    GROUP BY p.product_id ) t2
+    on t1.product_id=t2.product_id order by advertising_fees desc limit 0,6
+  </select>
+  <!--  -->
+  <!-- 页面显示 t1商品信息表，商品图片表，品牌表，t2 count（*），productid 评论表 -->
+  <select id="getProductList" resultMap="ProductInfoResultMap">
+    select t1.*,t2.num
+    from(
+    select p.product_id,p.price,p.product_name,p.descript,b.brand_name,pic.pic_url
+    from product_info p,product_pic_info pic,brand_info b
+    where p.product_id = pic.product_id
+    and p.brand_id = b.brand_id
+    and product_name
+    like concat(concat('%',#{productName}),'%')
+    ORDER BY product_id ) t1
+    left JOIN
+   (select count(*) as num,p.product_id
+    from product_info p,product_comment pc
+    where pc.product_id = p.product_id
+    GROUP BY p.product_id ) t2
+    on t1.product_id=t2.product_id limit #{pageNum},20
+  </select>
+  <!--  -->
+<!-- 模糊查询 -->
+  <select id="likeSelect" resultMap="ProductInfoResultMap">
+   select t1.*,t2.num
+    from(
+    select p.product_id,p.price,p.product_name,p.descript,b.brand_name,pic.pic_url
+    from product_info p,product_pic_info pic,brand_info b
+    where
+      p.product_id = pic.product_id
+      and p.brand_id = b.brand_id
+        and product_name
+    like concat(concat('%',#{productName}),'%')
+    ORDER BY product_id) t1
+    left JOIN
+    (select count(*) as num,p.product_id
+    from product_info p,product_comment pc
+    where pc.product_id = p.product_id
+    GROUP BY p.product_id ) t2
+    on t1.product_id=t2.product_id limit #{pageNum},20
+  </select>
+<!--  -->
+  <!-- 模糊查询(在结果中查询) -->
+  <select id="likeSelectInTotal" resultMap="ProductInfoResultMap">
+    select t1.*,t2.num
+    from(
+    select p.product_id,p.price,p.product_name,p.descript,b.brand_name,pic.pic_url
+    from product_info p,product_pic_info pic,brand_info b
+    <where> p.product_id = pic.product_id
+    and p.brand_id = b.brand_id
+      <if test="productName != null">
+    and product_name like concat(concat('%',#{productName}),'%')
+      </if>
+      <if test="input != null">
+        and product_name like concat(concat('%',#{input}),'%')
+      </if>
+    </where>
+    ORDER BY product_id) t1
+    left JOIN
+    (select count(*) as num,p.product_id
+    from product_info p,product_comment pc
+    where pc.product_id = p.product_id
+    GROUP BY p.product_id ) t2
+    on t1.product_id=t2.product_id limit #{pageNum},20
+  </select>
+  <!--  -->
+  <!-- 按价格排序 -->
+  <select id="orderByPrice" resultMap="ProductInfoResultMap">
+    select t1.*,t2.num
+    from(
+    select p.product_id,p.price,p.product_name,p.descript,b.brand_name,pic.pic_url
+    from product_info p,product_pic_info pic,brand_info b
+    <where>
+    p.product_id = pic.product_id
+    and p.brand_id = b.brand_id
+    <if test="input != null">
+    and product_name like concat(concat('%',#{input}),'%')
+    </if>
+    </where>
+    ORDER BY product_id) t1
+    left JOIN
+    (select count(*) as num,p.product_id
+    from product_info p,product_comment pc
+    where pc.product_id = p.product_id
+    GROUP BY p.product_id ) t2
+    on t1.product_id=t2.product_id
+    order by price desc  limit #{pageNum},20
+  </select>
+  <!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!---->
+  <!-- 按销量排序 -->
+  <select id="orderBySalesVolume" resultMap="ProductInfoResultMap">
+    select t1.*,t2.num
+    from(
+    select p.product_id,p.price,p.product_name,p.descript,p.sales_volume,b.brand_name,pic.pic_url
+    from product_info p,product_pic_info pic,brand_info b
+    <where>
+      p.product_id = pic.product_id
+      and p.brand_id = b.brand_id
+      <if test="input != null">
+        and product_name like concat(concat('%',#{input}),'%')
+      </if>
+    </where>
+    ORDER BY product_id) t1
+    left JOIN
+    (select count(*) as num,p.product_id
+    from product_info p,product_comment pc
+    where pc.product_id = p.product_id
+    GROUP BY p.product_id ) t2
+    on t1.product_id=t2.product_id
+    order by sales_volume desc  limit #{pageNum},20
+  </select>
+  <!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!---->
+  <!-- 按评论数排序 -->
+  <select id="orderByComment" resultMap="ProductInfoResultMap">
+    select t1.*,t2.num
+    from(
+    select p.product_id,p.price,p.product_name,p.descript,p.sales_volume,b.brand_name,pic.pic_url
+    from product_info p,product_pic_info pic,brand_info b
+    <where>
+      p.product_id = pic.product_id
+      and p.brand_id = b.brand_id
+      <if test="input != null">
+        and product_name like concat(concat('%',#{input}),'%')
+      </if>
+    </where>
+    ORDER BY product_id) t1
+    left JOIN
+    (select count(*) as num,p.product_id
+    from product_info p,product_comment pc
+    where pc.product_id = p.product_id
+    GROUP BY p.product_id ) t2
+    on t1.product_id=t2.product_id
+    order by num desc  limit #{pageNum},20
+  </select>
+  <!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!---->
+  <!-- 查询商品数量和商品页数 -->
+  <select id="getCount" resultType="INTEGER">
+   select count(*) as count
+   from product_info
+  </select>
+  <!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!---->
+  <!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!---->
+  <!-- 查询商品一级分类 -->
+  <select id="getLevel1" resultMap="ProductInfoResultMap">
+   select category_name from product_category where category_id=(select one_category_id from product_info pi,product_category pc where product_name like concat(concat('%',#{searchName}),'%') LIMIT 1)
+  </select>
+  <!-- 查询商品二级分类 -->
+  <select id="getLevel2" resultMap="ProductInfoResultMap">
+   select category_name from product_category where category_id=(select two_category_id from product_info pi,product_category pc where product_name like concat(concat('%',#{searchName}),'%') LIMIT 1)
+  </select>
+  <!-- 查询商品一级分类所有子分类 -->
+  <select id="getLevel1All" resultMap="ProductInfoResultMap">
+ select category_name from product_category where parent_id=(select one_category_id from product_info pi,product_category pc where product_name like concat(concat('%',#{searchName}),'%') LIMIT 1)  </select>
+  <!-- 查询商品二级分类所有子分类 -->
+  <select id="getLevel2All" resultMap="ProductInfoResultMap">
+   select category_name from product_category where parent_id=(select two_category_id from product_info pi,product_category pc where product_name like concat(concat('%',#{searchName}),'%') LIMIT 1)
+  </select>
+  <!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!---->
+  <sql id="Base_Column_List" >
+    product_id, product_name, brand_id, one_category_id, two_category_id, three_category_id,
+    price, sales_volume, advertising_fees
+  </sql>
+  <sql id="Blob_Column_List" >
+    descript
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="ResultMapWithBLOBs" parameterType="java.lang.Integer" >
+    select
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from product_info
+    where product_id = #{productId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from product_info
+    where product_id = #{productId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="org.lanqiao.jd.entity.ProductInfo" >
+    insert into product_info (product_id, product_name, brand_id, 
+      one_category_id, two_category_id, three_category_id, 
+      price, sales_volume, advertising_fees, 
+      descript)
+    values (#{productId,jdbcType=INTEGER}, #{productName,jdbcType=VARCHAR}, #{brandId,jdbcType=INTEGER}, 
+      #{oneCategoryId,jdbcType=SMALLINT}, #{twoCategoryId,jdbcType=SMALLINT}, #{threeCategoryId,jdbcType=SMALLINT}, 
+      #{price,jdbcType=DECIMAL}, #{salesVolume,jdbcType=INTEGER}, #{advertisingFees,jdbcType=INTEGER}, 
+      #{descript,jdbcType=LONGVARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="org.lanqiao.jd.entity.ProductInfo" >
+    insert into product_info
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="productId != null" >
+        product_id,
+      </if>
+      <if test="productName != null" >
+        product_name,
+      </if>
+      <if test="brandId != null" >
+        brand_id,
+      </if>
+      <if test="oneCategoryId != null" >
+        one_category_id,
+      </if>
+      <if test="twoCategoryId != null" >
+        two_category_id,
+      </if>
+      <if test="threeCategoryId != null" >
+        three_category_id,
+      </if>
+      <if test="price != null" >
+        price,
+      </if>
+      <if test="salesVolume != null" >
+        sales_volume,
+      </if>
+      <if test="advertisingFees != null" >
+        advertising_fees,
+      </if>
+      <if test="descript != null" >
+        descript,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="productId != null" >
+        #{productId,jdbcType=INTEGER},
+      </if>
+      <if test="productName != null" >
+        #{productName,jdbcType=VARCHAR},
+      </if>
+      <if test="brandId != null" >
+        #{brandId,jdbcType=INTEGER},
+      </if>
+      <if test="oneCategoryId != null" >
+        #{oneCategoryId,jdbcType=SMALLINT},
+      </if>
+      <if test="twoCategoryId != null" >
+        #{twoCategoryId,jdbcType=SMALLINT},
+      </if>
+      <if test="threeCategoryId != null" >
+        #{threeCategoryId,jdbcType=SMALLINT},
+      </if>
+      <if test="price != null" >
+        #{price,jdbcType=DECIMAL},
+      </if>
+      <if test="salesVolume != null" >
+        #{salesVolume,jdbcType=INTEGER},
+      </if>
+      <if test="advertisingFees != null" >
+        #{advertisingFees,jdbcType=INTEGER},
+      </if>
+      <if test="descript != null" >
+        #{descript,jdbcType=LONGVARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="org.lanqiao.jd.entity.ProductInfo" >
+    update product_info
+    <set >
+      <if test="productName != null" >
+        product_name = #{productName,jdbcType=VARCHAR},
+      </if>
+      <if test="brandId != null" >
+        brand_id = #{brandId,jdbcType=INTEGER},
+      </if>
+      <if test="oneCategoryId != null" >
+        one_category_id = #{oneCategoryId,jdbcType=SMALLINT},
+      </if>
+      <if test="twoCategoryId != null" >
+        two_category_id = #{twoCategoryId,jdbcType=SMALLINT},
+      </if>
+      <if test="threeCategoryId != null" >
+        three_category_id = #{threeCategoryId,jdbcType=SMALLINT},
+      </if>
+      <if test="price != null" >
+        price = #{price,jdbcType=DECIMAL},
+      </if>
+      <if test="salesVolume != null" >
+        sales_volume = #{salesVolume,jdbcType=INTEGER},
+      </if>
+      <if test="advertisingFees != null" >
+        advertising_fees = #{advertisingFees,jdbcType=INTEGER},
+      </if>
+      <if test="descript != null" >
+        descript = #{descript,jdbcType=LONGVARCHAR},
+      </if>
+    </set>
+    where product_id = #{productId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKeyWithBLOBs" parameterType="org.lanqiao.jd.entity.ProductInfo" >
+    update product_info
+    set product_name = #{productName,jdbcType=VARCHAR},
+      brand_id = #{brandId,jdbcType=INTEGER},
+      one_category_id = #{oneCategoryId,jdbcType=SMALLINT},
+      two_category_id = #{twoCategoryId,jdbcType=SMALLINT},
+      three_category_id = #{threeCategoryId,jdbcType=SMALLINT},
+      price = #{price,jdbcType=DECIMAL},
+      sales_volume = #{salesVolume,jdbcType=INTEGER},
+      advertising_fees = #{advertisingFees,jdbcType=INTEGER},
+      descript = #{descript,jdbcType=LONGVARCHAR}
+    where product_id = #{productId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="org.lanqiao.jd.entity.ProductInfo" >
+    update product_info
+    set product_name = #{productName,jdbcType=VARCHAR},
+      brand_id = #{brandId,jdbcType=INTEGER},
+      one_category_id = #{oneCategoryId,jdbcType=SMALLINT},
+      two_category_id = #{twoCategoryId,jdbcType=SMALLINT},
+      three_category_id = #{threeCategoryId,jdbcType=SMALLINT},
+      price = #{price,jdbcType=DECIMAL},
+      sales_volume = #{salesVolume,jdbcType=INTEGER},
+      advertising_fees = #{advertisingFees,jdbcType=INTEGER}
+    where product_id = #{productId,jdbcType=INTEGER}
+  </update>
+</mapper>

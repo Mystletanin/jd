@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>首页</title>
+    <link href="css/base.css" rel="stylesheet">
+    <link href="css/index.css" rel="stylesheet">
+
+    <script src="js/jquery-3.4.1.js"></script>
+    <script>
+        function gettime(t){
+            var _time=new Date(t);
+            var   year=_time.getFullYear();//2017
+            var   month=_time.getMonth()+1;//7
+            var   date=_time.getDate();//10
+            var   hour=_time.getHours();//10
+            var   minute=_time.getMinutes();//56
+            var   second=_time.getSeconds();//15
+            return   year+"年"+month+"月"+date+"日   "+hour+":"+minute+":"+second;//这里自己按自己需要的格式拼接
+        }
+        $(function () {
+            //搜索
+            $("#header41 span a").click(function () {
+                var searchText=$("#header41 input").val();
+                location.href="search.html?productName="+encodeURI(encodeURI(searchText))+"";
+            })
+
+            var loginName=sessionStorage.getItem("loginName");
+            $("#lName").children().remove();
+            $lName=("<span id=\"inLName\">你好，"+loginName+"</span>");
+            $("#lName").append($lName);
+            var cId=sessionStorage.getItem("customerId");
+            $.ajax({
+
+                url: "http://localhost:8080/getallpronpd/"+cId+"",
+                type: "post",
+                dataType: "json",
+                success: function (data) {
+
+                    for (var j=0;j<data.length;j++){
+                        var $si=$("<div class=\"content3\">\n" +
+                            "        <div class=\"content3.1\">订单编号："+data[j].orderId+"</div>\n" +
+                            "        <div class=\"content3.2\">下单时间："+gettime(data[j].orderTime)+"</div>\n" +
+                            "        <div class=\"content3.3\"><span><a class='delete'>删除订单</a></span></div>\n" +
+                            "    </div>");
+                        $("#content04").append($si);
+                    for (var i = 0; i < data[j].orderDetails.length; i++) {
+                        var $li = $("<div class=\"content4\">\n" +
+                            "            <div class=\"content4.1\"><input type=\"image\"src=\""+data[j].orderDetails[i].productInfo.productPicInfo.picUrl+"\"width=\"60px\"height=\"60px\"></div>\n" +
+                            "            <div class=\"content4.2\"><p>"+data[j].orderDetails[i].productInfo.productName + "</p><p>" + data[j].orderDetails[i].productInfo.descript + "</p></div>\n" +
+                            "            <div class=\"content4.3\"><span>" + data[j].orderDetails[i].productCnt + "</span></div>\n" +
+                            "            <div class=\"content4.4\"><p>申请售后</p><p>卖了换钱</p></div>\n" +
+                            "            <div class=\"content4.5\"><span>成成</span></div>\n" +
+                            "            <div class=\"content4.6\"><span>总价：" + data[j].orderDetails[i].productInfo.price * data[j].orderDetails[i].productCnt + "</span></div>\n" +
+                            "            <div class=\"content4.7\"><a>订单详情</a></div>\n" +
+                            "        </div>");
+                        $("#content04").append($li);
+                    }
+
+                        $(".delete").click(function () {
+                            var  id=parseInt($(this).parent().parent().prev().prev().text().substring(5,14));
+                            console.log(id);
+                            $.ajax({
+                                url: "http://localhost:8080/deleteOrder",
+                                type: "post",
+                                data: {"orderId":id},
+                                dataType: "json",
+                                success: function () {
+                                        $(location).attr('href', 'http://localhost:8080/index.html');
+                                }
+                            })
+                        });
+
+                    }
+                // $("#content4").remove();
+
+                }
+
+            });
+
+
+
+
+        });
+
+    </script>
+
+</head>
+<body>
+<div id="position">
+<div id="menu">
+    <div id="menu_content">
+        <ul id="m_left">
+            <li class="iconfont red font14"></li>
+            <li>北京</li>
+        </ul>
+        <ul id="m_right">
+            <li id="m_right_first"><span id="lName"><span id="inLName">你好，请登录</span></span> &nbsp;<span class="red">欢迎您</span></li>
+            <li class="spacer"></li>
+            <li class="dt"><a>我的订单</a></li>
+            <li class="spacer"></li>
+            <li class="dt1"><a>我的京东</a><i class="iconfont"></i></li>
+            <li class="spacer"></li>
+            <li class="dt"><a>京东会员</a></li>
+            <li class="spacer"></li>
+            <li class="dt1"><span class="red">企业采购</span><i class="iconfont"></i></li>
+            <li class="spacer"></li>
+            <li class="dt1">客户服务<i class="iconfont"></i></li>
+            <li class="spacer"></li>
+            <li class="dt1">网站导航<i class="iconfont"></i></li>
+            <li class="spacer"></li>
+            <li class="dt">手机京东</li>
+        </ul>
+    </div>
+</div>
+<div id="header">
+    <div id="header1">
+        <input type="image" src="images/图标.png" width="158px" height="80px">
+    </div>
+
+    <div id="header2">
+        <p id="header2.1">&nbsp;&nbsp;我的京东</p>
+        <div id="header2.2"><a href="jd_index.html">&nbsp;返回京东首页</a></div>
+    </div>
+    <div id="header3">
+        <ul>
+            <li><a href="jd_index.html">首页</a></li>
+            <li><a>账户设置</a></li>
+            <li><a>评价</a></li>
+            <li><a>消息</a></li>
+        </ul>
+    </div>
+    <div id="header4">
+        <div id="header41">
+            <input type="text" style="height: 30px ;border: white">
+            <span style="text-align: center ;"><a>搜索</a></span>
+        </div>
+        <div id="header4.2">
+            <input type="image" src="images/cart.png" width="22px" ;height="22px">
+            <span><a href="cart.html">我的购物车</a></span>
+        </div>
+    </div>
+
+
+</div>
+<div id="content">
+    <div id="content1">
+        <ul class="options">
+            <li class="option1"><a><b>我的订单</b></a></li>
+            <li class="option"><a>我的活动</a></li>
+            <li class="option"><a>评价晒单</a></li>
+            <li class="option"><a>我的常购商品</a></li>
+            <li class="option"><a>代下单</a></li>
+        </ul>
+        <ul class="options">
+            <li class="option1"><a><b>关注中心</b></a></li>
+            <li class="option"><a>关注的商品</a></li>
+            <li class="option"><a>关注的店铺</a></li>
+            <li class="option"><a>关注的专辑</a></li>
+            <li class="option"><a>收藏的内容</a></li>
+            <li class="option"><a>关注的活动</a></li>
+        </ul>
+        <ul class="options">
+            <li class="option1"><a><b>资产中心</b></a></li>
+            <li class="option"><a>小金库</a></li>
+            <li class="option"><a>京东白条</a></li>
+            <li class="option"><a>领货码</a></li>
+            <li class="option"><a>余额</a></li>
+            <li class="option"><a>红包</a></li>
+            <li class="option"><a>银行卡</a></li>
+        </ul>
+        <ul class="options">
+            <li class="option1" ><a><b>特色业务</b></a></li>
+            <li class="option"><a>我的营业厅</a></li>
+            <li class="option"><a>京东通信</a></li>
+            <li class="option"><a>节能补贴</a></li>
+            <li class="option"><a>医药服务</a></li>
+            <li class="option"><a>我的课程</a></li>
+        </ul>
+
+
+
+
+
+
+
+
+
+
+
+
+    </div>
+    <div id="content2">
+        <div id="content2.1" style="font-family: 'Microsoft YaHei';font-size: 15px "><b>我的订单</b></div>
+        <div id="content2.2">
+            <ul id="status">
+                <li>全部订单</li>
+                <li>待付款</li>
+                <li>待收货</li>
+            </ul>
+            <div id="content2.2.1">
+                <input type="text" style="height: 30px ;">
+                <span style="text-align: center ;font-size: 15px;"><a>搜索</a></span>
+            </div>
+        </div>
+        <div id="content5">
+
+            <div id="content5.2">订单详情</div>
+            <div id="content5.3">数量</div>
+            <div id="content5.4">收货人</div>
+            <div id="content5.5">总金额</div>
+        </div>
+<!--        <div id="content3">-->
+<!--        <div id="content3.1">订单编号：12346546</div>-->
+<!--        <div id="content3.2">下单时间：2019.03.01.11:23</div>-->
+<!--        <div id="content3.3"><span><a>删除订单</a></span></div>-->
+<!--    </div>-->
+        <div id="content04">
+<!--            <div id="content4">-->
+<!--                <div id="content4.1"><input type="image" src="images/图标.png" width="60px" height="60px"></div>-->
+<!--                <div id="content4.2"></div>-->
+<!--                <div id="content4.3"><span>1</span></div>-->
+<!--                <div id="content4.4"><p>申请售后</p>-->
+<!--                    <p>卖了换钱</p></div>-->
+<!--                <div id="content45">-->
+<!--                    <span><a>成成</a></span>-->
+<!--                </div>-->
+<!--                <div id="content4.6"><span>总价：251</span></div>-->
+<!--                <div id="content4.7"><a>订单详情</a></div>-->
+<!--            </div>-->
+        </div>
+    </div>
+</div>
+
+<div id="footer">
+    <iframe id="footerFrame" name="footerFrame" src="footer.html" width="990" height="400" frameborder="0"
+            scrolling="no"></iframe>
+</div>
+</div>
+<!--右侧浮动快捷方式-->
+<!--<div id="float_right">-->
+<!--    <ul>-->
+<!--        <li><a class="elevator_lk">京东秒杀</a></li>-->
+<!--        <li class="float_right_line"></li>-->
+<!--        <li><a class="elevator_lk">特色优选</a></li>-->
+<!--        <li class="float_right_line"></li>-->
+<!--        <li><a class="elevator_lk">频道广场</a></li>-->
+<!--        <li class="float_right_line"></li>-->
+<!--        <li><a class="elevator_lk">为你推荐</a></li>-->
+<!--        <li class="float_right_line"></li>-->
+<!--        <li><a class="elevator_lk" href="#top"><span class="elevator_totop_icon"></span> 顶部</a></li>-->
+<!--    </ul>-->
+<!--</div>-->
+
+
+</body>
+</html>

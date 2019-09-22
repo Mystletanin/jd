@@ -1,0 +1,499 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>个人注册</title>
+    <style>
+        /*#firststep{*/
+        /*    display: none;*/
+        /*}*/
+        #secondstep {
+            display: none;
+        }
+
+        #thirdstep {
+            display: none;
+        }
+
+        .red {
+            margin-left: 410px;
+        }
+    </style>
+    <link href="css/jd-base.css" rel="stylesheet">
+    <link href="css/jd-注册界面.css" rel="stylesheet">
+    <script src="js/jquery-3.4.1.min.js"></script>
+    <script src="js/jquery.validate.js"></script>
+    <script src="js/jquery.validate.regex.js"></script>
+    <script>
+        $(function () {
+            $("#fhsy").click(function () {
+                location.href="jd_index.html";
+            });
+
+            var tag;
+            var tag1;
+            var telnum;
+            var tag2;
+            var sextag;
+            var tagid;
+            $("input[name='checktelnumber']").click(function () {
+
+                $.ajax({
+                    url: "/checktel",
+                    type: "post",
+                    dataType: "text",
+                    data: {
+                        "tel": $("input[name='phoneNumber']").val()
+                    },
+                    success: function (data) {
+                        tag = data;
+                        if (tag=="1") {
+                            tag1=1;
+                            $("span[name='error1']").empty();
+                            $("span[name='error2']").empty();
+                            var $errorMsg = "<span name='error1' class='num'>手机号码已被注册！</span>";
+                            $("input[name='checktelnumber']").after($errorMsg);
+                        }else{
+                            tag1=2;
+                            $("span[name='error2']").empty();
+                            $("span[name='error1']").empty();
+                            var $errorMsg = "<span name='error2' class='num'>手机号码可以使用！</span>";
+                            $("input[name='checktelnumber']").after($errorMsg);
+                        }
+                    },
+                    error: function (data) {
+                        alert(data);
+                    }
+
+                })
+                // $.ajax({
+                //     url:"/checktel",
+                //     type:"post",
+                //     dataType:"text",
+                //     data:{
+                //         // 'regTel':$("#number").val()
+                //         'tel':$("#number").val()
+                //     },
+                //     success:function (data){
+                //         alert(1111)
+                //         tag=data;
+                //         if (tag>=1){
+                //             var $errorMsg = $("<span class='num'>手机号码不合法！</span>");
+                //             $("input[name='checktelnumber']").after($errorMsg);
+                //         }
+                //     },
+                //     error:function () {
+                //     alert(9999)
+                //     }
+                // })
+            });
+            // $("input[name='checktelnumber']").click(function () {
+
+            //
+            // });
+
+
+            //点击下一步出发
+            $("#next").click(function () {
+                if (tag1==2) {
+                    step2();
+                }
+            })
+            // 跳转立即注册
+            function step2() {
+                // alert("1111111");
+                // $("input[name='tel']").next(".num").remove();
+                var reg = /^\d{11}$/
+                if (!reg.test($("input[name='phoneNumber']").val())) {
+                    // alert(!reg.test($("input[name='tel']").val()))
+                    // var $errorMsg = ("<span class='num'>手机号码不合法！</span>");//准备错误信息
+                    $("span[name='error']").empty();
+                    var $errorMsg = "<span name='error' class='num'>手机号码不合法！</span>";//准备错误信息
+
+                    // $("input[name='tel']").after($errorMsg);//将错误信息加入输入框后面
+
+                    $("#number").after($errorMsg);
+                    // return false;
+                } else {
+                    var ele2 = document.getElementById("second_o");
+                    var ele1 = document.getElementById("first_o");
+                    var ele3 = document.getElementById("firststep");
+                    var ele4 = document.getElementById("secondstep");
+                    ele2.style.color = "white";
+                    ele2.style.backgroundColor = "green";
+                    ele1.style.color = "black";
+                    ele1.style.backgroundColor = "white";
+                    ele3.style.display = "none";
+                    ele4.style.display = "block";
+                    telnum = $("input[name='tel']").val()
+                }
+
+            }
+
+            // $("input[name='yz_username']").blur(function () {
+            //     $(this).next(".red").remove();
+            //     var reg = /^[a-zA-Z]{1}[A-Z|a-z|0-9]{4,20}/;
+            //     if (!reg.test($(this).val())) {
+            //         var $errorMsg = $("<span class='red'>用户名不合法！</span>");//准备错误信息
+            //         $(this).after($errorMsg);//将错误信息加入输入框后面
+            //         return false;
+            //     }
+            // });
+
+            //用户名表单验证
+            // $(function () {
+            //     $("#myform").validate({
+            //         rules:{
+            //             yz_username:{
+            //                 required:true,
+            //                 // regex:/^w{4,20}$/
+            //             }
+            //         },
+            //         messages:{
+            //             yz_username: {
+            //                 required: "",
+            //                 // regex: "用户名不合法"
+            //             }
+            //         }
+            //     })
+            // });
+
+
+            // function step2() {
+            //     if ($("input[name='tel']").val() != null) {
+            //         var ele2 = document.getElementById("second_o");
+            //         var ele1 = document.getElementById("first_o");
+            //         var ele3 = document.getElementById("firststep");
+            //         var ele4 = document.getElementById("secondstep");
+            //         ele2.style.color = "white";
+            //         ele2.style.backgroundColor = "green";
+            //         ele1.style.color = "black";
+            //         ele1.style.backgroundColor = "white";
+            //         ele3.style.display = "none";
+            //         ele4.style.display = "block";
+            //     }else{
+            //         alert("请输入手机号码！");
+            //     }
+            // }
+
+
+            $("#ljzc").click(function () {
+                step3();
+            })
+
+//跳转注册成功
+            function step3() {
+                $("input[name='yz_username']").next(".red").remove();
+                var reg = /^\w{4,20}$/
+                if (!reg.test($("input[name='yz_username']").val())) {
+                    var $errorMsg = $("<span class='red'>用户名不合法！</span>");//准备错误信息
+                    $("input[name='yz_username']").after($errorMsg);//将错误信息加入输入框后面
+                    //return false;
+                }
+
+                $("input[name='yz_realname']").next(".red").remove();
+                var reg4 = /^[\u4e00-\u9fa5]{2,4}$/
+                if (!reg4.test($("input[name='yz_realname']").val())) {
+                    var $errorMsg = $("<span class='red'>真实姓名不合法！</span>");//准备错误信息
+                    $("input[name='yz_realname']").after($errorMsg);//将错误信息加入输入框后面
+                    //return false;
+                }
+
+                $("input[name='yz_setpwd']").next(".red").remove();
+                var reg1 = /^\w{6,20}$/
+                if (!reg1.test($("input[name='yz_setpwd']").val())) {
+                    var $errorMsg1 = $("<span class='red'>密码设置不合法！</span>");//准备错误信息
+                    $("input[name='yz_setpwd']").after($errorMsg1);//将错误信息加入输入框后面
+                    //return false;
+                }
+
+                $("input[name='yz_confirmpwd']").next(".red").remove();
+                //var reg2 = /^\w{6,20}$/
+                if (document.getElementById("input_confirmpwd").value != document.getElementById("input_setpwd").value) {
+                    var $errorMsg2 = $("<span class='red'>两次密码不一致！</span>");//准备错误信息
+                    $("input[name='yz_confirmpwd']").after($errorMsg2);//将错误信息加入输入框后面
+                    //return false;
+                }
+
+                $("input[name='yz_emailcheck']").next(".red").remove();
+                var reg3 = /^[a-zA-Z0-9_-]+@[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+)+$/
+                if (!reg3.test($("input[name='yz_emailcheck']").val())) {
+                    var $errorMsg2 = $("<span class='red'>邮箱不合法！</span>");//准备错误信息
+                    $("input[name='yz_emailcheck']").after($errorMsg2);//将错误信息加入输入框后面
+                    //return false;
+                }
+
+                if (reg.test($("input[name='yz_username']").val()) && reg1.test($("input[name='yz_setpwd']").val()) && document.getElementById("input_confirmpwd").value == document.getElementById("input_setpwd").value && reg3.test($("input[name='yz_emailcheck']").val()) && reg4.test($("input[name='yz_realname']").val()))
+                {
+                    sextag=$("input:radio[name='2']:checked").val();
+
+                    // var radio=document.getElementsByName('2');
+                    // for(var i=0;i<radio.length;i++){
+                    //     if(radio[i].checked) {
+                    //         sextag.push(radio[i].value);
+                    //     }
+                    // }
+                    // if (document.getElementById("man").checked){
+                    //     sextag.push() ;
+                    // }
+                    // if (document.getElementById("woman").checked){
+                    //     sextag = "女";
+                    // }
+                    $.ajax({
+                        url:"/checkloginname",
+                        type:"post",
+                        dataType:"text",
+                        data:{
+                            'loginName':$("#input_username").val()
+                        },
+                        success:function (data){
+                            tag2=data;
+                            if (tag2=="1"){
+                                // $("span[name='error1']").empty();
+                                // $("span[name='error2']").empty();
+                                // var $errorMsg = "<span name='error1' class='num'>该用户名已被注册！</span>";
+                                // $("input[name='yz_username']").after($errorMsg);
+                                alert("该用户名已被注册！");
+                            } else{
+                                $.ajax({
+                                    url:"/insertlogin",
+                                    type:"post",
+                                    dataType:"text",
+                                    data:{
+                                        'loginName':$("#input_username").val(),
+                                        'password':$("#input_setpwd").val()
+                                    },
+                                    success:function (data) {
+
+                                        $.ajax({
+                                            url:"/loginid",
+                                            type:"post",
+                                            dataType:"text",
+                                            data:{
+                                                'loginName':$("#input_username").val()
+                                            },
+                                            success:function (data){
+                                                tagid = data;
+                                                $.ajax({
+                                                    url:"/insertinfo",
+                                                    type:"post",
+                                                    dataType:"text",
+                                                    data:{
+                                                        'customerName':$("#input_realname").val(),
+                                                        'sex':sextag,
+                                                        'tel':$("#number").val(),
+                                                        'email':$("#input_emailcheck").val(),
+                                                        'loginId':tagid
+                                                    },
+                                                    success:function (data){
+
+                                                        if (data != 0) {
+                                                            var ele2 = document.getElementById("second_o");
+                                                            var ele3 = document.getElementById("third_o");
+                                                            var ele1 = document.getElementById("secondstep");
+                                                            var ele4 = document.getElementById("thirdstep");
+                                                            ele2.style.color = "black";
+                                                            ele2.style.backgroundColor = "white";
+                                                            ele3.style.color = "white";
+                                                            ele3.style.backgroundColor = "green";
+                                                            ele1.style.display = "none";
+                                                            ele4.style.display = "block";
+                                                        }else{
+                                                            alert("注册失败！");
+                                                        }
+                                                    }
+                                                })
+                                            }
+                                        })
+                                    }
+                                })
+                            }
+                        }
+                    })
+
+
+
+
+
+
+
+
+
+
+
+                }
+            }
+
+
+//结束
+        })
+
+
+    </script>
+</head>
+<body>
+<div id="header">
+    <div id="root_logo">
+        <a href="#"><img src="images/root_logo.png"></a>
+    </div>
+    <div id="logo_title">
+        欢迎注册
+    </div>
+    <div id="have_account">
+        <ul>
+            <li>已有账号？</li>
+            <li class="ple"><a href="jd_login.html">请登录></a></li>
+        </ul>
+    </div>
+</div>
+<div id="container">
+    <div id="three_o">
+        <div id="first_o">
+            <span class="step-index">1</span>
+            <p class="step-desc">验证手机号</p>
+
+        </div>
+
+        <div class="line1">·&nbsp;&nbsp;·&nbsp;&nbsp;·&nbsp;&nbsp;·&nbsp;&nbsp;·&nbsp;&nbsp;·&nbsp;&nbsp;·&nbsp;&nbsp;·&nbsp;&nbsp;·&nbsp;&nbsp;·></div>
+
+        <div id="second_o">
+            <span class="step-index">2</span>
+            <p class="step-desc">填写账号信息</p>
+
+        </div>
+
+        <div class="line2">·&nbsp;&nbsp;·&nbsp;&nbsp;·&nbsp;&nbsp;·&nbsp;&nbsp;·&nbsp;&nbsp;·&nbsp;&nbsp;·&nbsp;&nbsp;·&nbsp;&nbsp;·></div>
+
+        <div id="third_o">
+            <span class="step-index">3</span>
+            <p class="step-desc">注册成功</p>
+
+        </div>
+
+    </div>
+    <div id="firststep">
+        <div id="phone">
+            <div id="country">
+                <select id="place" name="place">
+                    <option value="0">请选择地区</option>
+                    <option value="1">中国0886</option>
+                    <option value="2">美国0001</option>
+                    <option value="3">日本0081</option>
+                    <option value="4">韩国0082</option>
+                </select>
+            </div>
+            <input id="number" name="phoneNumber" type="text" placeholder="建议使用常用手机号">
+        </div>
+        <div>
+            <ul id="tip_tel">
+                <li>(验证完成后，你可以使用该手机登陆或找回密码)</li>
+            </ul>
+        </div>
+        <div id="getcode">
+
+            <input type="button" id="checktelnum" name="checktelnumber" value="点击按钮进行验证">
+        </div>
+        <input type="button" id="next" value="下一步" >
+<!--        <button id="next" value="下一步"></button>-->
+    </div>
+
+    <div id="secondstep">
+        <form id="myform">
+            <div id="username">
+                <div id="yhm"> &nbsp;&nbsp;&nbsp;&nbsp;用 户 名</div>
+            </div>
+            <input id="input_username" name="yz_username" type="text" placeholder="您的账户名和登录名">
+            <ul id="tip_username">
+                <li>(支持中文、英文、数字、“-”、“_”的组合，4-20个字符)</li>
+            </ul>
+
+            <div id="realname">
+                <div id="zsxm">  真 实 姓 名</div>
+            </div>
+            <input id="input_realname" name="yz_realname" type="text" placeholder="您的真实姓名">
+
+            <div id="usersex">
+                <div id="yhxb"> 性 别</div>
+                <div id="options">
+                    <input id="man" type="radio" checked ="checked" name="2" value="男">男
+                    <input id="woman" type="radio"  name="2" value="女">女
+                </div>
+            </div>
+
+            <div id="setpwd">
+                <div id="szmm"> &nbsp;&nbsp;设 置 密 码</div>
+            </div>
+            <input id="input_setpwd" name="yz_setpwd" type="text" placeholder="建议使用两种或两种以上字符组合">
+            <ul id="tip_setpwd">
+                <li>(建议使用字母、数字和符号两种及以上的组合，6-20个字符)</li>
+            </ul>
+            <div id="confirmpwd">
+                <div id="qrmm">&nbsp;&nbsp; 确 认 密 码</div>
+
+            </div>
+            <input id="input_confirmpwd" name="yz_confirmpwd" type="text" placeholder="请再次输入密码">
+            <ul id="tip_confirmpwd">
+                <li>(请再次输入密码)</li>
+            </ul>
+            <div id="emailcheck">
+                <div id="yxyz">&nbsp;&nbsp; 邮 箱 验 证</div>
+
+            </div>
+            <input id="input_emailcheck" name="yz_emailcheck" type="text" placeholder="请输入邮箱">
+            <ul id="tip_emailcheck">
+                <li>(验证完成后，你可以使用该邮箱登陆)</li>
+            </ul>
+        </form>
+        <div id="emailcheckcode">
+            <div id="yxyzm"> &nbsp;&nbsp;邮箱验证码</div>
+            <input id="input_emailcheckcode" type="text" placeholder="请输入邮箱验证码">
+            <a href="#">
+                <div id="hqyzm"> 获取验证码</div>
+            </a>
+        </div>
+        <div id="registernow">
+            <input type="button" id="ljzc" value="立即注册" >
+        </div>
+    </div>
+    <div id="thirdstep">
+        <div id="zccg">
+            <img src="images/绿勾.png">
+            <div id="words">恭喜您，注册成功！</div>
+            <div id="words1"><a href="jd_login.html"> 立即登陆></a></div>
+        </div>
+        <div id="back">
+            <input type="button" id="fhsy" value="返回首页">
+        </div>
+    </div>
+
+    <div id="other">
+        <ul>
+            <li class="comp"><a href="#"> 企业用户注册</a></li>
+            <li class="foreign"><a href="#">海外用户注册</a></li>
+        </ul>
+    </div>
+</div>
+<div id="footer">
+    <div id="links">
+        <ul id="links_ser">
+            <li><a href="#">关于我们</a>&nbsp;&nbsp;|&nbsp;&nbsp;</li>
+            <li><a href="#">联系我们</a>&nbsp;&nbsp;|&nbsp;&nbsp;</li>
+            <li><a href="#">人才招聘</a>&nbsp;&nbsp;|&nbsp;&nbsp;</li>
+            <li><a href="#">商家入驻</a>&nbsp;&nbsp;|&nbsp;&nbsp;</li>
+            <li><a href="#">广告服务</a>&nbsp;&nbsp;|&nbsp;&nbsp;</li>
+            <li><a href="#">手机京东</a>&nbsp;&nbsp;|&nbsp;&nbsp;</li>
+            <li><a href="#">友情链接</a>&nbsp;&nbsp;|&nbsp;&nbsp;</li>
+            <li><a href="#">销售联盟</a>&nbsp;&nbsp;|&nbsp;&nbsp;</li>
+            <li><a href="#">京东社区</a>&nbsp;&nbsp;|&nbsp;&nbsp;</li>
+            <li><a href="#">京东公益</a>&nbsp;&nbsp;|&nbsp;&nbsp;</li>
+            <li><a href="#">English Site</a></li>
+        </ul>
+    </div>
+    <div id="copyright">
+        <ul id="cori">
+            <li>Copyright©2004-2019&nbsp;&nbsp; 京东JD.com 版权所有</li>
+        </ul>
+    </div>
+</div>
+</body>
+</html>

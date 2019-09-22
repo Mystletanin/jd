@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="org.lanqiao.jd.mapper.OrderDetailMapper" >
+  <resultMap id="BaseResultMap" type="org.lanqiao.jd.entity.OrderDetail" >
+  <id column="order_detail_id" property="orderDetailId" jdbcType="INTEGER" />
+  <result column="order_id" property="orderId" jdbcType="INTEGER" />
+  <result column="product_id" property="productId" jdbcType="INTEGER" />
+  <result column="product_cnt" property="productCnt" jdbcType="INTEGER" />
+</resultMap>
+  <sql id="Base_Column_List" >
+    order_detail_id, order_id, product_id, product_cnt
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from order_detail
+    where order_detail_id = #{orderDetailId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from order_detail
+    where order_detail_id = #{orderDetailId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="org.lanqiao.jd.entity.OrderDetail" >
+    insert into order_detail (order_detail_id, order_id, product_id, 
+      product_cnt)
+    values (#{orderDetailId,jdbcType=INTEGER}, #{orderId,jdbcType=INTEGER}, #{productId,jdbcType=INTEGER}, 
+      #{productCnt,jdbcType=INTEGER})
+  </insert>
+  <insert id="insertSelective" parameterType="org.lanqiao.jd.entity.OrderDetail" >
+    insert into order_detail
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="orderDetailId != null" >
+        order_detail_id,
+      </if>
+      <if test="orderId != null" >
+        order_id,
+      </if>
+      <if test="productId != null" >
+        product_id,
+      </if>
+      <if test="productCnt != null" >
+        product_cnt,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="orderDetailId != null" >
+        #{orderDetailId,jdbcType=INTEGER},
+      </if>
+      <if test="orderId != null" >
+        #{orderId,jdbcType=INTEGER},
+      </if>
+      <if test="productId != null" >
+        #{productId,jdbcType=INTEGER},
+      </if>
+      <if test="productCnt != null" >
+        #{productCnt,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="org.lanqiao.jd.entity.OrderDetail" >
+    update order_detail
+    <set >
+      <if test="orderId != null" >
+        order_id = #{orderId,jdbcType=INTEGER},
+      </if>
+      <if test="productId != null" >
+        product_id = #{productId,jdbcType=INTEGER},
+      </if>
+      <if test="productCnt != null" >
+        product_cnt = #{productCnt,jdbcType=INTEGER},
+      </if>
+    </set>
+    where order_detail_id = #{orderDetailId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="org.lanqiao.jd.entity.OrderDetail" >
+    update order_detail
+    set order_id = #{orderId,jdbcType=INTEGER},
+      product_id = #{productId,jdbcType=INTEGER},
+      product_cnt = #{productCnt,jdbcType=INTEGER}
+    where order_detail_id = #{orderDetailId,jdbcType=INTEGER}
+  </update>
+</mapper>

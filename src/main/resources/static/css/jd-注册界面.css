@@ -1,0 +1,391 @@
+*{
+    margin: auto;
+}
+/*header*/
+#header{
+    width: 1280px;
+    height: 110px;
+    background-color: white;
+}
+#root_logo{
+    float: left;
+    margin-top: 12.5px;
+}
+#logo_title{
+    width: 200px;
+    height: 40px;
+    float: left;
+    font-size: 30px;
+    margin-top: 35px;
+    color: black;
+}
+#have_account{
+    width: 145px;
+    height: 21px;
+    float: left;
+    background-color: white;
+    margin-left: 700px;
+    margin-top: 70px;
+    font-size: larger;
+}
+#have_account .ple a{
+    color: red;
+}
+#have_account .ple a:hover{
+    color: brown;
+    text-decoration: underline;
+}
+
+/*container*/
+#container{
+    width: 1210px;
+    height: 900px;
+    background-color: white;
+    margin-top: 80px;
+}
+#three_o{
+    width: 400px;
+    height: 55px;
+
+}
+
+#first_o{
+    color: white;
+    width: 60px;
+    height: 55px;
+    background-color: green;
+    margin-right: 100%;
+}
+.line1{
+    width: 115px;
+    height: 10px;
+    background-color: white;
+    margin-right: 225px;
+    margin-top: -40px;
+}
+#second_o{
+    width: 80px;
+    height: 55px;
+    background-color: white;
+    float: left;
+    margin-top: -25px;
+    margin-left: 162px;
+}
+
+.line2{
+    width: 80px;
+    height: 10px;
+    background-color: white;
+    margin-right: 75px;
+    margin-top: -10px;
+}
+
+#third_o{
+    width: 60px;
+    height: 55px;
+    background-color: white;
+    float: right;
+    margin-top: -25px;
+}
+
+#phone{
+    width: 400px;
+    height: 80px;
+    background-color: white;
+    margin-top: 50px;
+}
+#country{
+    width: 108px;
+    height: 52px;
+    background-color: #e5d790;
+    float: left;
+}
+#place{
+    width: 108px;
+    height: 52px;
+}
+#number{
+    width: 288px;
+    height: 49px;
+    float: right;
+}
+#tip_tel{
+    float: right;
+    margin-top: -60px;
+    margin-right: 140px;
+    color: #888888;
+}
+#getcode{
+
+    width: 400px;
+    height: 54px;
+    background-color: white;
+    margin-top: 5px;
+}
+#checktelnum{
+    float: right;
+    width: 400px;
+    height: 54px;
+}
+
+#next{
+    color: white;
+     width: 400px;
+     height: 54px;
+     background-color: red;
+     margin-top: 40px;
+    margin-left: 405px;
+ }
+
+#username{
+    border:1px solid #000;
+    font-size: larger;
+    margin-top: 30px;
+    width: 400px;
+    height: 50px;
+}
+#tip_username{
+    float: right;
+    margin-top: -35px;
+    margin-right: 80px;
+    color: #888888;
+}
+#yhm{
+    float: left;
+    margin-top: 12px;
+}
+#input_username{
+    width: 310px;
+    height: 46px;
+    float: right;
+    margin-right: 405px;
+    margin-top: -51px;
+}
+#realname{
+    border:1px solid #000;
+    font-size: larger;
+    margin-top: 30px;
+    width: 400px;
+    height: 50px;
+}
+#zsxm{
+    float: left;
+    margin-top: 12px;
+}
+#input_realname{
+    width: 310px;
+    height: 47px;
+    float: right;
+    margin-right: 405px;
+    margin-top: -52px;
+}
+
+#usersex{
+    border:1px solid #000;
+    font-size: larger;
+    margin-top: 30px;
+    width: 400px;
+    height: 50px;
+}
+#yhxb{
+    float: left;
+    margin-top: 12px;
+}
+#options{
+    border:1px solid #888888;
+    width: 314px;
+    height: 49px;
+    margin-top: -34px;
+    float: left;
+    margin-left: 84px;
+}
+.myforms-3-2{
+    margin-top: 13px;
+    width: 20px;
+    height: 20px;
+}
+.myforms-3-3{
+    width: 20px;
+    height: 20px;
+    margin-left: 50px;
+}
+
+#setpwd{
+    border:1px solid #000;
+    font-size: larger;
+    margin-top: 30px;
+    width: 400px;
+    height: 50px;
+}
+#tip_setpwd{
+    float: right;
+    margin-top: -35px;
+    margin-right: 75px;
+    color: #888888;
+}
+#szmm{
+    float: left;
+    margin-top: 12px;
+}
+#input_setpwd{
+    width: 310px;
+    height: 47px;
+    float: right;
+    margin-right: 405px;
+    margin-top: -52px;
+}
+#confirmpwd{
+    border:1px solid #000;
+    font-size: larger;
+    margin-top: 30px;
+    width: 400px;
+    height: 50px;
+}
+#tip_confirmpwd{
+    float: right;
+    margin-top: -35px;
+    margin-right: 305px;
+    color: #888888;
+}
+#qrmm{
+    float: left;
+    margin-top: 12px;
+}
+#input_confirmpwd{
+    width: 310px;
+    height: 47px;
+    float: right;
+    margin-right: 405px;
+    margin-top: -52px;
+}
+#emailcheck{
+    border:1px solid #000;
+    font-size: larger;
+    margin-top: 30px;
+    width: 400px;
+    height: 50px;
+}
+#tip_emailcheck{
+    float: right;
+    margin-top: -35px;
+    margin-right: 195px;
+    color: #888888;
+}
+#yxyz{
+    float: left;
+    margin-top: 12px;
+}
+#input_emailcheck{
+    width: 310px;
+    height: 47px;
+    float: right;
+    margin-right: 405px;
+    margin-top: -52px;
+}
+#emailcheckcode{
+    border:1px solid #000;
+    font-size: larger;
+    margin-top: 30px;
+    width: 400px;
+    height: 50px;
+
+}
+#yxyzm{
+    float: left;
+    margin-top: 12px;
+}
+#input_emailcheckcode{
+    width: 200px;
+    height: 46px;
+    float: right;
+    margin-right: 110px;
+}
+#hqyzm{
+    float: right;
+    margin-top: 12px;
+    margin-left: 20px;
+    margin-top: -35px;
+    margin-right: 20px;
+}
+#registernow{
+    margin-top: 30px;
+    width: 400px;
+    height: 50px;
+
+}
+#ljzc{
+    color: white;
+    width: 400px;
+    height: 50px;
+    background-color: red;
+}
+#zccg{
+    margin-top: 30px;
+    width: 400px;
+    height: 100px;
+    background-color: white;
+}
+#words{
+    margin-right: 10px;
+    font-size: 30px;
+    float: right;
+    margin-top: 10px;
+}
+#words1{
+    float: right;
+    margin-right: 130px;
+    margin-top: -20px;
+}
+#back{
+    margin-top: 10px;
+    width: 400px;
+    height: 50px;
+    background-color: #888888;
+}
+#fhsy{
+    width: 400px;
+    height: 50px;
+    background-color: red;
+    color: white;
+}
+#other{
+    width: 400px;
+    height: 28px;
+    background-color: white;
+    margin-top: 41px;
+}
+.foreign{
+    float: right;
+    margin-right: 30px;
+}
+.comp{
+    margin-left: 30px;
+}
+#footer{
+    width: 1210px;
+    height: 118px;
+    background-color: white;
+    margin-top: 100px;
+}
+#links{
+    width: 1210px;
+    height: 65px;
+
+}
+#links_ser{
+    margin-left: 20%;
+}
+#links_ser a:hover{
+    color: #888888;
+    text-decoration: underline;
+}
+#copyright{
+    width: 1210px;
+    height: 20px;
+
+    margin-top: 10px;
+}
+#cori{
+    color: #888888;
+    margin-left: 490px;
+}

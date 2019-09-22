@@ -1,0 +1,68 @@
+
+.font14 {
+    font-size: 14px
+}
+
+.red {
+    font-c
+}
+
+/*顶层文件*/
+#top {
+    width: 1184px;
+    height: 31px;
+    background-color: #E3E4E5;
+    color: #999999
+}
+
+#top li {
+    line-height: 30px;
+}
+
+#top_left {
+    width: 107px;
+    height: 31px;
+    background-color: #E3E4E5;
+    float: left
+}
+
+#top_middle {
+    width: 58px;
+    height: 31px;
+    background-color: #E3E4E5;
+    text-align: center;
+    float: left
+}
+
+#m_left li {
+    margin-right: 4px
+
+}
+
+#top li {
+    line-height: 30px
+}
+
+#top ul {
+    list-style: none
+}
+
+#top ul li {
+    float: left
+}
+
+#top ul li
+    /*菜单栏*/
+#menu {
+    width: 1184px;
+    height: 141px;
+    background-color: white
+}
+
+
+/*中间部分*/
+#middle {
+    width: 1184px;
+    height: 480px;
+    background-color: #E3E4E5
+}

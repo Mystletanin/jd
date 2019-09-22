@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="org.lanqiao.jd.mapper.ProductCommentMapper" >
+  <resultMap id="ProductCommentResultMap" type="org.lanqiao.jd.entity.ProductComment" >
+    <id column="comment_id" property="commentId" jdbcType="INTEGER" />
+    <result column="product_id" property="productId" jdbcType="INTEGER" />
+    <result column="order_id" property="orderId" jdbcType="INTEGER" />
+    <result column="customer_id" property="customerId" jdbcType="INTEGER" />
+    <result column="content" property="content" jdbcType="VARCHAR" />
+    <result column="audit_time" property="auditTime" jdbcType="TIMESTAMP" />
+    <association property="productInfo" resultMap="ProductInfoResultMap"></association>
+    <association property="customerInfo" resultMap="CustomerInfoResultMap"></association>
+  </resultMap>
+  <resultMap id="ProductInfoResultMap" type="org.lanqiao.jd.entity.ProductInfo" >
+    <id column="product_id" property="productId" jdbcType="INTEGER" />
+    <result column="product_name" property="productName" jdbcType="VARCHAR" />
+    <result column="brand_id" property="brandId" jdbcType="INTEGER" />
+    <result column="one_category_id" property="oneCategoryId" jdbcType="SMALLINT" />
+    <result column="two_category_id" property="twoCategoryId" jdbcType="SMALLINT" />
+    <result column="three_category_id" property="threeCategoryId" jdbcType="SMALLINT" />
+    <result column="price" property="price" jdbcType="INTEGER" />
+    <result column="sales_volume" property="salesVolume" jdbcType="INTEGER" />
+    <result column="advertising_fees" property="advertisingFees" jdbcType="INTEGER" />
+  </resultMap>
+  <resultMap id="CustomerInfoResultMap" type="org.lanqiao.jd.entity.CustomerInfo" >
+    <id column="customer_id" property="customerId" jdbcType="INTEGER" />
+    <result column="customer_name" property="customerName" jdbcType="VARCHAR" />
+    <result column="sex" property="sex" jdbcType="VARCHAR" />
+    <result column="tel" property="tel" jdbcType="INTEGER" />
+    <result column="email" property="email" jdbcType="VARCHAR" />
+    <result column="integral" property="integral" jdbcType="INTEGER" />
+    <result column="balance" property="balance" jdbcType="INTEGER" />
+    <result column="login_id" property="loginId" jdbcType="INTEGER" />
+    <result column="level_id" property="levelId" jdbcType="INTEGER" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    comment_id, product_id, order_id, customer_id, content, audit_time
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="ProductCommentResultMap" parameterType="java.lang.Integer" >
+    select 
+    c.product_id, c.customer_id, c.content, c.audit_time,pi.product_name,ci.customer_name
+    from product_comment c , product_info pi ,customer_info ci
+    where c.product_id = pi.product_id = #{productId,jdbcType=INTEGER} and ci.customer_id=c.customer_id
+  </select>
+  <select id="selectContent" resultMap="ProductCommentResultMap" parameterType="java.lang.Integer">
+    select
+    content
+    from product_comment
+    on product_id = #{productId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from product_comment
+    where comment_id = #{commentId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="org.lanqiao.jd.entity.ProductComment" >
+    insert into product_comment (comment_id, product_id, order_id, 
+      customer_id, content, audit_time
+      )
+    values (#{commentId,jdbcType=INTEGER}, #{productId,jdbcType=INTEGER}, #{orderId,jdbcType=INTEGER}, 
+      #{customerId,jdbcType=INTEGER}, #{content,jdbcType=VARCHAR}, #{auditTime,jdbcType=TIMESTAMP}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="org.lanqiao.jd.entity.ProductComment" >
+    insert into product_comment
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="commentId != null" >
+        comment_id,
+      </if>
+      <if test="productId != null" >
+        product_id,
+      </if>
+      <if test="orderId != null" >
+        order_id,
+      </if>
+      <if test="customerId != null" >
+        customer_id,
+      </if>
+      <if test="content != null" >
+        content,
+      </if>
+      <if test="auditTime != null" >
+        audit_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="commentId != null" >
+        #{commentId,jdbcType=INTEGER},
+      </if>
+      <if test="productId != null" >
+        #{productId,jdbcType=INTEGER},
+      </if>
+      <if test="orderId != null" >
+        #{orderId,jdbcType=INTEGER},
+      </if>
+      <if test="customerId != null" >
+        #{customerId,jdbcType=INTEGER},
+      </if>
+      <if test="content != null" >
+        #{content,jdbcType=VARCHAR},
+      </if>
+      <if test="auditTime != null" >
+        #{auditTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="org.lanqiao.jd.entity.ProductComment" >
+    update product_comment
+    <set >
+      <if test="productId != null" >
+        product_id = #{productId,jdbcType=INTEGER},
+      </if>
+      <if test="orderId != null" >
+        order_id = #{orderId,jdbcType=INTEGER},
+      </if>
+      <if test="customerId != null" >
+        customer_id = #{customerId,jdbcType=INTEGER},
+      </if>
+      <if test="content != null" >
+        content = #{content,jdbcType=VARCHAR},
+      </if>
+      <if test="auditTime != null" >
+        audit_time = #{auditTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where comment_id = #{commentId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="org.lanqiao.jd.entity.ProductComment" >
+    update product_comment
+    set product_id = #{productId,jdbcType=INTEGER},
+      order_id = #{orderId,jdbcType=INTEGER},
+      customer_id = #{customerId,jdbcType=INTEGER},
+      content = #{content,jdbcType=VARCHAR},
+      audit_time = #{auditTime,jdbcType=TIMESTAMP}
+    where comment_id = #{commentId,jdbcType=INTEGER}
+  </update>
+</mapper>

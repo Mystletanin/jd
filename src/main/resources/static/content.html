@@ -1,0 +1,607 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>content</title>
+    <link href="css/content.css" rel="stylesheet">
+    <link href="css/content_base.css" rel="stylesheet">
+    <script src="js/jquery-3.4.1.min.js"></script>
+    <script src="js/layer/layer.js"></script>
+    <script>
+
+        function getUrlParam(name) {
+            var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)"); //构造一个含有目标参数的正则表达式对象
+            var r = window.location.search.substr(1).match(reg); //匹配目标参数
+            if (r != null) return unescape(r[2]); return null; //返回参数值
+        }
+        $(function(){
+            //搜索
+            $("#search_left img").click(function () {
+                var searchText=$("#search_left input").val();
+                location.href="search.html?productName="+encodeURI(encodeURI(searchText))+"";
+            })
+
+            var loginName=sessionStorage.getItem("loginName");
+            $("#lName").children().remove();
+            $lName=("<a href=\"#\">你好，"+loginName+"</a>");
+            $("#lName").append($lName);
+            $("#search_top_center").click(function () {
+                location.href="cart.html";
+            })
+
+            var pId = getUrlParam('productId');
+            var cId=sessionStorage.getItem("customerId");
+            $.ajax({
+                url:"http://localhost:8080/orderCartCount",
+                data:{customerId:cId},
+                type:"post",
+                dataType:"json",
+                //------------------------------------------------------------------------------------
+                success:function (data) {
+                    $("#orderCartCount").children().remove();
+                    $orderCC=("<i class=\"ci-count cart2\">"+data+"</i>");
+                    $("#orderCartCount").append($orderCC);
+                }
+            });
+            var plus=document.getElementById("plus");
+            var reduce=document.getElementById("reduce");
+            var i=0;
+
+            //评论
+            $.ajax({
+                url:"http://localhost:8080/selectAll",
+                datatype:"text",
+                type:"post",
+                data:{productId:pId},
+                success: function(data){
+                    $("#comment_message_all").children().remove();
+                    for(i=0;i<data.length;i++){
+                        // console.log((data[i].productInfo.productName));
+                        var $comment_message=$("<div class=\"comment_message\">\n" +
+                            "        <div class=\"comment_name1\"><img src=\"images/head1.jpg\">&nbsp;&nbsp;"+data[i].customerInfo.customerName+"</div>\n" +
+                            "        <div class=\"comment_message1\">\n" +
+                            "            <ul><li class=\"star\"><img src=\"images/stars.png\"> </li></ul>\n" +
+                            "            <div class=\"text_content\"><span>"+data[i].content+"</span></div>\n" +
+                            "            <div class=\"text_foot\">\n" +
+                            "                <ul>\n" +
+                            "                    <li class=\"product_name\"><span>"+data[i].productInfo.productName+"</span></li>\n" +
+                            "                    <li class=\"text_time\">"+data[i].auditTime+"</li>\n" +
+                            "                </ul>\n" +
+                            "            </div>\n" +
+                            "        </div>\n" +
+                            "    </div>\n" +
+                            "    <div class=\"line\"></div>");
+                        $("#comment_message_all").append($comment_message);
+                    }
+
+                }
+            })
+
+
+            //修改商品名字和价格以及type1
+            $.ajax({
+                url:"http://localhost:8080/selectOne",
+                datatype:"text",
+                type:"post",
+                data:{productId:pId},
+                success: function(data){
+                    console.log(data)
+                    $("#add").html("<b id='add'>"+data[0].productName+"</b>");
+                    $(".sea1").html("<li class='sea1'><a href='#'>"+data[0].productName+"&nbsp;</a> </li>")
+                    $("#price1").html("<span >"+data[0].price+"</span>");
+                    $("#type1").html("<li id='type1'><a href='#'>"+data[0].productCategoryList[0].categoryName+"&nbsp;&nbsp;</a> </li>")
+                }
+            });
+            //修改type2
+            $.ajax({
+                url:"http://localhost:8080/selectTwo",
+                datatype:"text",
+                type:"post",
+                data:{productId:pId},
+                success: function(data){
+                    console.log(data);
+                    $("#type2").html("<li id='type2'><a href='#'>"+data[0].productCategoryList[0].categoryName+"&nbsp;&nbsp;</a> </li>")
+                }
+            });
+            //修改type3
+            $.ajax({
+                url:"http://localhost:8080/selectThree",
+                datatype:"text",
+                type:"post",
+                data:{productId:pId},
+                success: function(data){
+                    console.log(data);
+                    $("#type3").html("<li id='type3'><a href='#'>"+data[0].productCategoryList[0].categoryName+"&nbsp;&nbsp;</a> </li>")
+                }
+            });
+            //修改品牌
+            $.ajax({
+                url:"http://localhost:8080/selectBrand",
+                datatype:"text",
+                type:"post",
+                data:{productId:pId},
+                success: function(data){
+                    $(".mine").html("<li class='mine'><a href='#'>&nbsp;&nbsp;"+data+"京东自营旗舰店&nbsp;&nbsp;</a> </li>")
+                    $(".sea").html("<li class='sea'><a href='#'>"+data+"&nbsp;</a> </li>")
+                }
+            });
+            //修改商品图片
+            $.ajax({
+                url:"http://localhost:8080/selectPic",
+                datatype:"text",
+                type:"post",
+                data:{productId:pId},
+                success: function(data){
+                    $("#picture_top img").attr("src",data);
+                    $(".all img").attr("src",data)
+                }
+            });
+
+
+
+
+            //加一
+            plus.onclick=function() {
+
+                $.ajax({
+                    url: "http://localhost:8080/get",
+                    datatype: "text",
+                    type: "post",
+                    data:{productId:pId},
+                    success: function (data) {
+                        if(document.getElementById("text").value<data){
+                            document.getElementById("text").value++;
+                        }else{
+                            layer.alert("商品由于太过火爆，库存不足，给您带来的不便敬请谅解！", {
+                                icon: 5,
+                                title: "提示"
+                            });
+                            document.getElementById("text").value=data;
+                        }
+                    }
+                })
+            };
+            //减一
+            reduce.onclick=function(){
+               var i= document.getElementById("text").value--;
+                if(i==1){
+                    document.getElementById("text").value=1;
+                }
+            }
+            //加入购物车
+
+            $.ajax({
+                url: "http://localhost:8080/selectPrice",
+                datatype: "text",
+                type: "post",
+                data: {productId: pId},
+                success: function (data) {
+                    var price=data;
+                    $("#join").click(function(){
+                        layer.alert("成功加入购物车！", {
+                            icon: 1,
+                            title: "提示"
+                        });
+                        $.ajax({
+                            url:"http://localhost:8080/insertOrder",
+                            data:{"productAmount":parseInt($("input[name='num']").val()),"productId":pId,"customerId":cId,"price":price},
+                            datatype:"text",
+                            type:"post",
+                        });
+                    });
+                }
+            })
+           // // 显示大图
+           // $("#middle1 li").on('mouseenter',function(){
+           //     var pic=$(this).find('img').attr('src');
+           //     $("#picture_top").find('img').attr('src',pic);
+           //
+           // });
+
+            //到货通知
+            $("#call").click(function(){
+                layer.alert("如有货物我们会第一时间通知您！", {
+                    icon: 6,
+                    title: "提示"
+                });
+            })
+
+        });
+
+
+
+
+    </script>
+</head>
+<body>
+<div id="top">
+    <div id="top_content">
+        <ul id="top_left">
+            <li><img src="images/con1.png"></li>
+            <li><a href="jd_index.html">返回首页</a></li>
+            <li>&nbsp;&nbsp;<img src="images/con2.png"></li>
+            <li>厦门</li>
+        </ul>
+        <ul id="top_right">
+<!--            <span class="red">&nbsp;&nbsp;免费注册</span>-->
+            <li id="hello"><span id="lName"><span id="inLName"><a href="#">你好，请登陆</a></span></span></li>
+            <li class="spacer"></li>
+            <li><a href="index.html">我的订单</a></li>
+            <li class="spacer"></li>
+            <li><a href="#">我的京东</a></li>
+            <li class="spacer"></li>
+            <li><a href="#">京东会员</a></li>
+            <li class="spacer"></li>
+            <li><a href="#">企业采购</a></li>
+            <li class="spacer"></li>
+            <li><a href="#">客户服务</a></li>
+            <li class="spacer"></li>
+            <li><a href="#">网站导航</a></li>
+            <li class="spacer"></li>
+            <li><a href="#">手机京东</a></li>
+        </ul>
+    </div>
+</div>
+<div id="menu">
+    <div id="menu_content">
+        <div id="menu_logo">
+            <ul>
+                <li class="logo"><img src="images/con3.png"></li>
+                <li id="all"><a href="#">全部分类</a></li>
+            </ul>
+        </div>
+
+        <div id="menu_search">
+            <div id="search_top">
+                <div id="search_left">
+                    <input type="text" id="keyword"><img src="images/kuo.png" height="33">
+                </div>
+                <div id="search_top_center" class="red">
+                    <i class="iconfont font16"></i><span id="orderCartCount"><i class="ci-count cart2">0</i></span><a href="cart.html">我的购物车</a>
+                </div>
+                <div id="search_bottom">
+                    <ul>
+                        <li><a href="#">高端轻奢</a></li>
+                        <li><a href="#">智能好货</a></li>
+                        <li><a href="#">节能精品</a></li>
+                        <li><a href="#">冰箱选购</a></li>
+                        <li><a href="#">洗衣机选购</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!--<div id="message">-->
+<!--    <div id="message_content">-->
+<!--        <img src="images/message.png">-->
+<!--    </div>-->
+<!--</div>-->
+<div id="first">
+    <div id="first_content">
+        <ul>
+            <li><a href="jd_index.html">首页</a></li>
+            <li><a href="#">空调</a></li>
+            <li><a href="#">冰箱</a></li>
+            <li><a href="#">洗衣机</a></li>
+            <li><a href="#">厨电</a></li>
+            <li><a href="#">冷柜</a></li>
+            <li><a href="#">洗碗机</a></li>
+            <li><a href="#">卡萨帝</a></li>
+            <li><a href="#">统帅</a></li>
+
+        </ul>
+
+    </div>
+</div>
+<div id="second">
+    <div id="second_content">
+        <ul>
+            <li id="type1"><a href="#">家用电器 &nbsp;&nbsp;&nbsp;</a></li>
+            <li>  >&nbsp;&nbsp;&nbsp;</li>
+            <li id="type2"><a href="#">大家电 &nbsp;&nbsp;&nbsp;</a></li>
+            <li>  >&nbsp;&nbsp;&nbsp;</li>
+            <li id="type3"><a href="#">洗衣机 &nbsp;&nbsp;&nbsp;</a></li>
+            <li>  >&nbsp;&nbsp;&nbsp;</li>
+            <li class="sea"><a href="#">海尔 (Haier) &nbsp;</a></li>
+            <li> &nbsp;&nbsp;&nbsp;> &nbsp;&nbsp;&nbsp;</li>
+            <li class="sea1">海尔EG9012B19SUJD</li>
+        </ul>
+        <ul id="right">
+            <li><a href="#">关注店铺 </a></li>
+            <li><img src="images/star.png">&nbsp;</li>
+            <li><a href="#">联系客服 &nbsp;&nbsp;&nbsp;</a></li>
+            <li><img src="images/phone.png">&nbsp;</li>
+            <li class="mine"><a href="#"> &nbsp;&nbsp;&nbsp;海尔京东自营旗舰店 &nbsp;&nbsp;&nbsp;</a></li>
+            <li class="my">自营</li>
+
+        </ul>
+
+    </div>
+</div>
+<div id="third">
+    <div id="third_content">
+        <div id="picture">
+            <div id="picture_top"><img src="images/picture1.jpg" id="1"></div>
+            <div id="picture_middle">
+<!--                <div id="picture_left"><img src="images/left.png">&nbsp;&nbsp;&nbsp;&nbsp;</div>-->
+<!--                <ul id="middle1">-->
+<!--                    <li><img src="images/picture1.jpg">&nbsp;&nbsp;</li>-->
+<!--                    <li><img src="images/picture2.jpg">&nbsp;&nbsp;</li>-->
+<!--                    <li><img src="images/picture3.jpg">&nbsp;&nbsp;</li>-->
+<!--                    <li><img src="images/picture4.jpg">&nbsp;&nbsp;</li>-->
+<!--                    <li><img src="images/picture5.jpg"></li>-->
+<!--                </ul>-->
+<!--                <div id="picture_right"><img src="images/right.png"></div>-->
+            </div>
+            <div id="picture_foot">
+                <ul>
+                    <li><img src="images/foot1.png">&nbsp;</li>
+                    <li><a href="#">关注</a> &nbsp;</li>
+                    <li><img src="images/foot2.png">&nbsp;</li>
+                    <li><a href="#">分享</a>&nbsp;</li>
+                    <li><img src="images/foot3.png">&nbsp;</li>
+                    <li><a href="#">对比</a></li>
+                </ul>
+            </div>
+        </div>
+        <div id="introduce">
+            <div id="introduce_top">
+                <ul>
+                    <li><b id="add">海尔&nbsp;&nbsp;(Haier）滚筒洗衣机全自动9公斤变频&nbsp;智能APP操纵&nbsp;双喷淋泡沫无残留<br>EG9012B19SU1JD</b></li>
+                </ul>
+            </div>
+            <div id="introduce_second">
+                <ul>
+                    <li class="eight">【嗨翻八月】&nbsp;专利双喷淋，窗门和窗垫泡沫真正无残留，特设消毒洗程序，为敏感肌肤保驾护航；</li>
+                    <li class="more">&nbsp;&nbsp;【查看更多】</li>
+                </ul>
+            </div>
+            <div id="introduce_third">
+                <div id="third_left1">
+                    <ul>
+                        <li class="jd">京&nbsp;东&nbsp;价&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span>¥</span></li>
+                        <li class="price"><span id="price1">2299.00&nbsp;&nbsp;&nbsp;</span> </li>
+                        <li class="cheap"><a href="#">降价通知</a></li>
+                    </ul>
+                </div>
+                <div id="introduce_right">
+                    <ul>
+                        <li class="spacer1"></li>
+                        <li>累计评价<br><span id="evaluate">&nbsp;<a href="#comment_top">5.3万+</a> </span></li>
+                        <li class="spacer1"></li>
+                        <li>选购指数<br><span>&nbsp;&nbsp;&nbsp;8.5</span></li>
+                    </ul>
+                </div>
+                <div id="third_left2">
+                    <ul>
+                        <li class="jd">优&nbsp;惠&nbsp;券&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</li>
+                        <li><img src="images/youhui.png"></li>
+                    </ul>
+                </div>
+            </div>
+            <div id="introduce_foot">
+                <div id="foot_fir">
+                    <ul>
+                        <li class="much">增值业务&nbsp;&nbsp;&nbsp;</li>
+                        <li><img src="images/change.png"></li>
+                    </ul>
+                </div>
+                <div id="foot_sec">
+                    <ul>
+                        <li class="much">配&nbsp;&nbsp;送&nbsp;&nbsp;至&nbsp;&nbsp;</li>
+                        <li class="address">福建厦门市集美区灌口镇&nbsp;>&nbsp;</li>
+                        <li class="much"><b>无货&nbsp;，&nbsp;此商品暂时售完</b></li>
+                    </ul>
+                </div>
+                <div id="foot_thi">
+                    <ul>
+                        <li>由<span>京东</span>发货，<span>海尔京东自营旗舰店</span>&nbsp;提供守候服务.</li>
+                    </ul>
+                </div>
+                <div class="space"></div>
+                <div id="foot_four">
+                    <div>
+                        <ul>
+                            <li class="much">选择系列</li>
+                        </ul>
+                    </div>
+                    <div id="four_pic">
+                        <div id="pic1">
+                            <ul>
+                                <li class="all"><img src="images/p1.jpg"></li>
+                                <li id="pro1">【新品】巴氏杀菌冷水护色洗</li>
+                            </ul>
+
+                        </div>
+                        <div id="pic2">
+                            <ul>
+                                <li class="all"><img src="images/p2.jpg"></li>
+                                <li id="pro2">【爆款】8公斤智能ABT双喷淋</li>
+                            </ul>
+
+                        </div>
+                        <div id="pic3">
+                            <ul>
+                                <li class="all"><img src="images/p3.jpg"></li>
+                                <li id="pro3">&nbsp;9公斤专利窗垫变频滚筒</li>
+                            </ul>
+
+                        </div>
+                        <div id="pic4">
+                            <ul>
+                                <li class="all"><img src="images/p4.jpg"></li>
+                                <li id="pro4"> &nbsp;9公斤智能变频滚筒</li>
+                            </ul>
+
+                        </div>
+                    </div>
+
+                </div>
+                <div class="space"></div>
+                <form>
+                <div id="last">
+                    <div id="last_left"><input name="num" type="text" value="1" id="text" style="width: 50px"></div>
+                    <div id="last_lefts">
+                        <div id="left1"><input type="button" value="+" id="plus"></div>
+                        <div id="left2"><input type="button" value="-" id="reduce"></div>
+                    </div>
+                    <div id="last_middle"><input type="button"  class="cart2" value="加入购物车" id="join"></div>
+                    <div id="last_right"><input type="button" id="call"  value="到货通知"></div>
+
+                </div>
+                </form>
+            </div>
+        </div>
+        <div id="third_right">
+            <div id="right_top"></div>
+            <div id="hai">
+                <ul>
+                    <li><img src="images/hai2.jpg"></li>
+                    <li>
+                        &nbsp;&nbsp;<a href="#">海尔&nbsp;&nbsp;(Haier)&nbsp;&nbsp;16升燃气... </a><br>&nbsp;&nbsp;&nbsp;&nbsp;<span>¥1899.00</span>
+                    </li>
+                </ul>
+            </div>
+            <div id="hai1">
+                <ul>
+                    <li><img src="images/hai3.jpg"></li>
+                    <li>
+                        &nbsp;&nbsp;<a href="#">海尔&nbsp;&nbsp;(Haier)&nbsp;&nbsp;20爆炒大... </a><br>&nbsp;&nbsp;&nbsp;&nbsp;<span>¥3199.00</span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+    </div>
+    <div id="for">
+        <div id="for_content"><b>为你推荐</b></div>
+    </div>
+</div>
+<div id="self">
+    <div id="jdSelf"><b>海尔京东自营旗舰店</b></div>
+<!--    <div id="find"><b>店内搜素</b></div>-->
+    <div id="jdIntroduce">
+        <div id="jdIntroduce_1">
+            <div id="jdIntroduce_11">
+                <img src="images/in.png"> </div>
+            </div>
+        <div id="jdIntroduce_2">
+            <div id="jdIntroduce_22">
+                <img src="images/inright.png">
+            </div>
+        </div>
+        </div>
+    <div id="find">&nbsp;&nbsp;<b>店内搜索</b></div>
+    <div id="find_content">
+        <div id="find_content_msg">
+            <div id="msg1">关键字：<input type="text" style="width: 110px;height: 21px"> </div>
+            <div id="msg2">价&nbsp;&nbsp;&nbsp;&nbsp;格：<input type="text" style="width: 42px;height: 20px"> 到&nbsp;&nbsp;<input type="text" style="width: 42px;height: 20px"> </div>
+            <input type="button" value="搜索" id="found">
+        </div>
+    </div>
+    <div id="classification">&nbsp;&nbsp;<b>店内分类</b></div>
+    <div id="list">
+        <ul>
+            <li>&nbsp;&nbsp;<img src="images/plus.png"><a href="#">空调</a>  </li>
+            <li>&nbsp;&nbsp;<img src="images/plus.png"><a href="#">冰箱</a></li>
+            <li>&nbsp;&nbsp;<img src="images/plus.png"><a href="#">洗衣机</a></li>
+            <li>&nbsp;&nbsp;<img src="images/plus.png"><a href="#">电视</a></li>
+            <li>&nbsp;&nbsp;<img src="images/plus.png"><a href="#">热水器</a></li>
+            <li>&nbsp;&nbsp;<img src="images/plus.png"><a href="#">厨电</a></li>
+            <li>&nbsp;&nbsp;<img src="images/plus.png"><a href="#">冷柜</a></li>
+            <li>&nbsp;&nbsp;<img src="images/plus.png"><a href="#">洗碗机</a></li>
+        </ul>
+    </div>
+    <div id="hotSell">
+        <ul>
+            <li class="hot1">店铺热销</li>
+            <li class="hot2">热门关注</li>
+        </ul>
+    </div>
+    <div id="hotSellFoot"></div>
+    <div id="imgArea">
+        <div id="area">
+            <ul>
+                <li><img src="images/hot1.jpg"> </li>
+                <li class="white"><b>¥1299.00</b></li>
+                <li><img src="images/hot2.jpg"> </li>
+                <li class="white"><b>¥1999.00</b></li>
+                <li><img src="images/hot3.jpg"> </li>
+                <li class="white"><b>¥2199.00</b></li>
+                <li><img src="images/hot4.jpg"> </li>
+                <li class="white"><b>¥3399.00</b></li>
+            </ul>
+
+        </div>
+    </div>
+
+  </div>
+
+</div>
+<div id="comment">
+    <div id="comment_top">
+        <div id="comment_top1"><a href="#">商品介绍</a> </div>
+        <div id="comment_top2"><a href="#">规格与包装</a> </div>
+        <div id="comment_top3"><a href="#">售后保障</a> </div>
+        <div id="comment_top4"><a href="#">商品评价(5.3万+)</a> </div>
+    </div>
+    <div id="comment_top_foot"></div>
+    <div id="product_comment"><b>商品评价</b></div>
+    <div id="comment_content">
+        <div id="hundred">
+            <ul>
+                <li class="well">好评度</li>
+                <li class="ninety">99<span>%</span></li>
+            </ul>
+        </div>
+        <div id="hundred_right">
+            <ul>
+                <li><a href="#">送货安装(87)</a> </li>
+                <li><a href="#">超强静音(73)</a> </li>
+                <li><a href="#">美观大气(77)</a> </li>
+                <li><a href="#">高端大气(55)</a> </li>
+                <li><a href="#">功能合理(99)</a> </li>
+                <li><a href="#">易于操控(21)</a> </li>
+                <li><a href="#">尺寸适宜(56)</a></li>
+                <br><br>
+                <li><a href="#">清洁能力强(25)</a> </li>
+                <li><a href="#">口碑很好(82)</a> </li>
+                <li><a href="#">省时便捷(35)</a> </li>
+                <li><a href="#">耐用性佳(33)</a> </li>
+            </ul>
+
+        </div>
+    </div>
+    <div id="comment_classification">
+        <ul>
+            <li class="comment">全部评价(5.3万+)</li>
+            <li><a href="#">晒图(500)</a> </li>
+            <li><a href="#">视频晒单(900+)</a></li>
+            <li><a href="#">追评(800+)</a></li>
+            <li><a href="#">好评(5.2万+)</a></li>
+            <li><a href="#">中评(100+)</a></li>
+            <li><a href="#">差评(200+)</a></li>
+        </ul>
+    </div>
+    <div id="comment_message_all">
+        <div class="comment_message">
+            <div class="comment_name1"><img src="images/head1.jpg">&nbsp;&nbsp; J***1</div>
+            <div class="comment_message1">
+                 <ul><li class="star"><img src="images/stars.png"> </li></ul>
+                 <div class="text_content"><span>618搞活动买的，价格优惠了*，而且送货速度非常快，头天下午下单，第二天早上就送到，送货人员也非常热心，值得大家放心购买哈。</span></div>
+                 <div class="text_foot">
+                    <ul>
+                        <li class="product_name"><span>9公斤专利窗垫变频滚筒</span></li>
+                        <li class="text_time">2019-06-20 22:39</li>
+                    </ul>
+                 </div>
+            </div>
+
+        </div>
+        <div class="line"></div>
+    </div>
+</div>
+
+</body>
+</html>

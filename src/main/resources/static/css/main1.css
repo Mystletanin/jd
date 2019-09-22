@@ -1,0 +1,170 @@
+#container {
+    width: 100%;
+    height: 1200px;
+    /*background-color: chartreuse;*/
+    margin: auto;
+}
+
+#header {
+    width: 990px;
+    height: 172px;
+    margin: auto;
+}
+
+#content {
+    width: 990px;
+    height: 770px;
+    margin: auto;
+}
+
+#footer {
+    width: 990px;
+    height: 258px;
+    background-color: aqua;
+    float: bottom;
+    margin: auto;
+}
+
+#shortcut {
+    width: 990px;
+    height: 31px;
+}
+
+#top {
+    width: 990px;
+    height: 141px;
+}
+
+#logo {
+    position: absolute;
+    top: 40px;
+    width: 190px;
+    height: 120px;
+    background-image: url("../images/logo.gif");
+}
+
+#search {
+    width: 786px;
+    height: 85px;
+    background-color: chartreuse;
+    margin-left: 203px;
+    position: absolute;
+    top: 40px;
+}
+
+#fl {
+    width: 58px;
+    height: 30px;
+}
+
+#fr {
+    width: 690px;
+    height: 30px;
+    position: absolute;
+    top: 0;
+    margin-left: 300px;
+}
+
+#item {
+    position: relative;
+    width: 760px;
+    height: 40px;
+    left: 203px;
+    top: 100px;
+    overflow: hidden;
+}
+
+#item li {
+    font-size: 17px;
+    font-weight: bold;
+    line-height: 40px;
+    margin: 11px;
+    text-align: -webkit-match-parent;
+    bottom: 10px;
+    color: #e1251b;
+}
+
+#fl span {
+    font-size: 17px;
+    font-weight: bold;
+    line-height: 40px;
+    margin-left: 10px;
+    text-align: center;
+}
+
+#fr span {
+    font-size: 17px;
+    font-weight: bold;
+    line-height: 40px;
+    margin-left: 10px;
+    text-align: center;
+}
+
+#search form {
+    position: absolute;
+    left: 20px;
+    top: 18px;
+    width: 546px;
+    height: 32px;
+    border: 2px solid #e2231a;
+    background: #fff;
+}
+
+#search button {
+    border-radius: 0;
+    right: 160px;
+    width: 58px;
+    height: 36px;
+    position: absolute;
+    top: 18px;
+    line-height: 32px;
+    border: none;
+    background-color: #e1251b;
+    font-size: 14px;
+    font-weight: 700;
+    color: #fff;
+    transition: background ease 0.2s;
+}
+
+#cw-icon {
+    width: 80px;
+    height: 36px;
+    background-color: #fff;
+    text-align: center;
+    line-height: 34px;
+    border-color: #eee;
+    position: absolute;
+    top: 18px;
+    right: 40px;
+}
+
+#menu {
+    width: 190px;
+    height: 470px;
+}
+
+.focus {
+    width: 590px;
+    height: 470px;
+    background-color: aliceblue;
+    position: relative;
+    top: -469px;
+    left: 192px;
+}
+
+#right_menu {
+    width: 206px;
+    height: 470px;
+    background-color: brown;
+    position: relative;
+    top: -940px;
+    left: 783px;
+}
+
+#menu dt {
+    font-size: 17px;
+    /*font-weight: bold;*/
+    line-height: 19px;
+    margin: 11px;
+    text-align: -webkit-match-parent;
+}

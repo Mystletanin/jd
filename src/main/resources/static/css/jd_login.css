@@ -1,0 +1,285 @@
+#container{
+    width: 1026px;
+    height: 699px;
+    margin: auto;
+}
+#head{
+    width: 1026px;
+    height: 60px;
+    margin: auto;
+}
+#content{
+    width: 1026px;
+    height: 514px;
+    background-color: #e93854;
+    margin: auto;
+}
+#footer{
+    width: 990px;
+    height: 85px;
+    margin: auto;
+    padding-bottom: 30px;
+    text-align: center;
+}
+#logo{
+    width: 300px;
+    height: 60px;
+}
+#logo b {
+    display: block;
+    width: 110px;
+    height: 40px;
+    position: relative;
+    left: 190px;
+    top: -40px;
+    background: url(../images/l-icon.png) no-repeat;
+}
+.q_link{
+    width: 136px;
+    height: 18px;
+    background-color: white;
+    float: right;
+    margin-top:-20px;
+    margin-right:10px;
+    font-size:11.5px;
+}
+.q_link b{
+    display: inline-block;
+    width: 18px;
+    height: 14px;
+    margin: 0 5px;
+    background: url(../images/q-icon.png) no-repeat;
+    overflow: hidden;
+    vertical-align: middle;
+}
+#tips{
+    width: 1026px;
+    height: 39px;
+    background: #fff8f0
+}
+.icon-tips{
+    background: url(../images/icon-tips.png);
+    display: inline-block;
+    width: 16px;
+    height: 16px;
+    vertical-align: middle;
+    margin-left: 95px;
+    margin-top:13px;
+}
+#tips p{
+    margin-left: 125px;
+    margin-top:-16px;
+}
+.black{
+    color: black;
+}
+.w{
+    width: 990px;
+    height: 475px;
+    background-image: url(../images/login_content.png);
+    margin: auto;
+}
+#login_form{
+    width: 346px;
+    height: 436px;
+    background-color: white;
+    position:absolute;
+    margin-left:620px;
+    margin-top:15px;
+}
+.tips-wrapper {
+    background: #fff8f0;
+    width: 100%;
+    padding-top: 15px;
+    padding-bottom: 10px;
+    text-align: center;
+}
+.cont-wrapper {
+    display: inline-block;
+    width: 90%;
+}
+.icon-tips2{
+    background: url(../images/icon-tips.png);
+    display: inline-block;
+    width: 16px;
+    height: 16px;
+    position:absolute;
+    margin-left: -150px;
+    margin-top:0 px;
+}
+.login-tab1{
+    height: 54px;
+    font-size: 18px;
+    font-family: "microsoft yahei";
+    text-align: center;
+    border-bottom: 1px solid #f4f4f4;
+    position: absolute;
+    background: #fff;
+    display: block;
+    left:60px;
+    top:60px;
+}
+.login-tab2{
+    height: 54px;
+    font-size: 18px;
+    font-family: "microsoft yahei";
+    text-align: center;
+    border-bottom: 1px solid #f4f4f4;
+    position: absolute;
+    background: #fff;
+    display: block;
+    left:200px;
+    top:60px;
+}
+.item-fore1{
+    border: 1px solid #bdbdbd;
+    height: 38px;
+    width: 304px;
+    margin-left:20px;
+    margin-top:100px
+}
+.item-fore2 {
+    border: 1px solid #bdbdbd;
+    height: 38px;
+    width: 304px;
+    margin-left:20px;
+    margin-top:30px
+}
+.login-label {
+    position: absolute;
+    z-index: 3;
+    top: auto;
+    left: 22px;
+    width: 38px;
+    height: 38px;
+    border-right: 1px solid #bdbdbd;
+    background: url(../images/pwd-icons-new.png) no-repeat;
+}
+.login-label2{
+    position: absolute;
+    z-index: 3;
+    top: auto;
+    left: 22px;
+    width: 38px;
+    height: 38px;
+    border-right: 1px solid #bdbdbd;
+    background: url(../images/pwd-icons-new.png) -48px 0 no-repeat;
+}
+.in_text {
+    line-height: 18px;
+    height: 18px;
+    border: 0;
+    padding: 10px 0 10px 50px;
+    width: 254px;
+    float: none;
+    overflow: hidden;
+    font-size: 14px;
+    font-family: '\5b8b\4f53';
+}
+.clear{
+    position: absolute;
+    z-index: 20;
+    right: 6px;
+    top: 12px;
+    width: 14px;
+    height: 14px;
+    background: url(../images/pwd-icons-new.png) -25px -143px no-repeat;
+    cursor: pointer;
+    display: none;
+}
+.forget{
+    position:absolute;
+    margin-top:10px;
+    margin-left:280px;
+}
+.login-btn {
+    border: 1px solid #cb2a2d;
+    margin: 0 auto;
+    height: 32px;
+    width: 303px;
+    position: relative;
+    top:50px;
+    left:0px;
+    overflow:hidden;
+}
+.login-btn .btn-img {
+    border: 1px solid #e85356;
+    display: block;
+    width: 302px;
+    background: #e4393c;
+    height: 31px;
+    line-height: 31px;
+    color: #fff;
+    font-size: 20px;
+    font-family: 'Microsoft YaHei';
+    padding-left:30px;
+    letter-spacing:20px;
+
+}
+.form_footer{
+    padding-left: 20px;
+    padding-right: 20px;
+    line-height: 50px;
+    border-top: 1px solid #f4f4f4;
+    height: auto;
+    background-color: #fcfcfc;
+    margin-top:90px;
+}
+.qq-icon{
+    width: 19px;
+    height: 18px;
+    display: block;
+    background: url(../images/QQ-weixin.png) no-repeat;
+    margin: 0 auto;
+    position: absolute;
+    float: left;
+    left: auto;
+    margin-top: 20px;
+}
+.foot_text1{
+    position:absolute;
+    margin-top:4px;
+    margin-left: 24px;
+}
+.foot_text2{
+    position:absolute;
+    margin-top:4px;
+    margin-left: 85px;
+}
+.line{
+    position:absolute;
+    margin-top:3.5px;
+    margin-left: 50px;
+}
+.wx-icon{
+    width: 19px;
+    height: 18px;
+    display: block;
+    background: url(../images/QQ-weixin.png) -20px 0 no-repeat;
+    margin: 0 auto;
+    position: absolute;
+    float: left;
+    left: 80px;
+    margin-top: 20px;
+}
+.regist-link {
+    color: #b61d1d;
+    font-size: 14px;
+    float:right;
+}
+.regist-link b {
+    display: inline-block;
+    width: 16px;
+    height: 16px;
+    overflow: hidden;
+    background: url(../images/pwd-icons-new.png) -104px -75px no-repeat;
+    vertical-align: middle;
+    margin-right: 5px;
+}
+.f_font{
+    font-size: 13px;
+    margin: 10px;
+}
+.copyright {
+    margin: 10px 0;
+}

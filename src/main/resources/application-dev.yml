@@ -1,0 +1,15 @@
+spring:
+  datasource:
+    username: root
+    password: cC123456
+    url: jdbc:mysql://localhost:3306/jddb?useUnicode=true&characterEncoding=utf-8&allowMultiQueries=true
+    driver-class-name: com.mysql.jdbc.Driver
+
+mybatis:
+  mapper-locations: classpath:org/lanqiao/jd/mapper/*.xml
+#  type-aliases-package: org.lanqiao.cart.entity
+
+#showSql
+logging:
+  level:
+    com.lanqiao.jd.mapper: DEBUG

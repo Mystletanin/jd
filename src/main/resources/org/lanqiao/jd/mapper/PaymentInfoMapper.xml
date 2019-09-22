@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="org.lanqiao.jd.mapper.PaymentInfoMapper" >
+  <resultMap id="BaseResultMap" type="org.lanqiao.jd.entity.PaymentInfo" >
+    <id column="pay_msg_id" property="payMsgId" jdbcType="INTEGER" />
+    <result column="pay_id" property="payId" jdbcType="INTEGER" />
+    <result column="pay_time" property="payTime" jdbcType="TIMESTAMP" />
+    <result column="cart_id" property="cartId" jdbcType="INTEGER" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    pay_msg_id, pay_id, pay_time, cart_id
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from payment_info
+    where pay_msg_id = #{payMsgId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from payment_info
+    where pay_msg_id = #{payMsgId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="org.lanqiao.jd.entity.PaymentInfo" >
+    insert into payment_info (pay_msg_id, pay_id, pay_time, 
+      cart_id)
+    values (#{payMsgId,jdbcType=INTEGER}, #{payId,jdbcType=INTEGER}, #{payTime,jdbcType=TIMESTAMP}, 
+      #{cartId,jdbcType=INTEGER})
+  </insert>
+  <insert id="insertSelective" parameterType="org.lanqiao.jd.entity.PaymentInfo" >
+    insert into payment_info
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="payMsgId != null" >
+        pay_msg_id,
+      </if>
+      <if test="payId != null" >
+        pay_id,
+      </if>
+      <if test="payTime != null" >
+        pay_time,
+      </if>
+      <if test="cartId != null" >
+        cart_id,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="payMsgId != null" >
+        #{payMsgId,jdbcType=INTEGER},
+      </if>
+      <if test="payId != null" >
+        #{payId,jdbcType=INTEGER},
+      </if>
+      <if test="payTime != null" >
+        #{payTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="cartId != null" >
+        #{cartId,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="org.lanqiao.jd.entity.PaymentInfo" >
+    update payment_info
+    <set >
+      <if test="payId != null" >
+        pay_id = #{payId,jdbcType=INTEGER},
+      </if>
+      <if test="payTime != null" >
+        pay_time = #{payTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="cartId != null" >
+        cart_id = #{cartId,jdbcType=INTEGER},
+      </if>
+    </set>
+    where pay_msg_id = #{payMsgId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="org.lanqiao.jd.entity.PaymentInfo" >
+    update payment_info
+    set pay_id = #{payId,jdbcType=INTEGER},
+      pay_time = #{payTime,jdbcType=TIMESTAMP},
+      cart_id = #{cartId,jdbcType=INTEGER}
+    where pay_msg_id = #{payMsgId,jdbcType=INTEGER}
+  </update>
+</mapper>

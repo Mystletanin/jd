@@ -1,0 +1,746 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>搜索页面</title>
+    <link rel="stylesheet" href="css/jdBase.css">
+    <link rel="stylesheet" href="css/京东搜索页.css">
+    <link rel="stylesheet" href="css/search_footer.css">
+    <script src="js/jquery-3.3.1.js"></script>
+    <script>
+        var pageNum=1;
+        var pageMax=2;
+        var likeSeTotal="牙刷";
+        //获取页面
+        function a(data){
+            for(var i=0;i<data.length;i=i+5){
+               var j=data.length-i;
+                if(j<5&&j!=0){
+                    var $goodsInfo=$("<div class=\"goodsInfo\"></div>");
+                    $("#goodsInfoAll").append($goodsInfo);
+                    for(var k=i;k<data.length;k++){
+                        var $div5min=$("                <div class=\"goodsInfo0\"><a href=\'content.html?productId="+data[k].productId+"'\><img class=\"goodsPic\" src=\""+data[k].productPicInfo.picUrl+"\"></a>\n" +
+                            "                    <div class=\"goodsMinPic\"><a href=\'content.html?productId="+data[k].productId+"'\><img src=\""+data[k].productPicInfo.picUrl+"\"></a></div>\n" +
+                            "                    <div class=\"goodsPri\"><a href=\'content.html?productId="+data[k].productId+"'\><em class=\"t16 verDana\">￥</em><i class=\"t20 verDana\">"+data[k].price+"</i></a></div>\n" +
+                            "                    <div class=\"goodsTxt\"><a href=\'content.html?productId="+data[k].productId+"'\>"+data[k].descript+"</a></div>\n" +
+                            "                    <div class=\"goodsEva\"><a href=\'content.html?productId="+data[k].productId+"'\ class=\"FB0 verDana fs\">"+data[k].num+"</a><a href=\"#\" class=\"a7\">条评价</a></div>\n" +
+                            "                    <div class=\"goodsPare\"><a href=\'content.html?productId="+data[k].productId+"'\ class=\"f9\">"+data[k].brandInfo.brandName+"</a></div>\n" +
+                            "                    <div class=\"goodsInSu\">\n" +
+                            "                        <a href=\"#\"><div class=\"goodsInSu1\">满减</div></a>\n" +
+                            "                        <a href=\"#\"><div class=\"goodsInSu2\">险</div></a>\n" +
+                            "                    </div>\n" +
+                            "                </div>");
+                        $(".goodsInfo:last").append($div5min);
+                    }
+
+                }else{
+                    // var $li = $("<div class=\"article\">\n" +
+                    //     "<div class=\"author\">用户："+data[i].author+"<span>"+data[i].id+"<#</span></div>\n" +
+                    //     "<div class=\"content\">"+data[i].message+"</div>\n" +
+                    //     "<div class=\"time page\">"+gettime(data[i].date)+"</div>\n" +
+                    //     "</div>\n"
+                    // );
+                    var $div5 = $("<div class=\"goodsInfo\">\n" +
+                        "                <div class=\"goodsInfo0\"><a href=\'content.html?productId="+data[i].productId+"'\><img class=\"goodsPic\" src=\""+data[i].productPicInfo.picUrl+"\"></a>\n" +
+                        "                    <div class=\"goodsMinPic\"><a href=\'content.html?productId="+data[i].productId+"'\><img src=\""+data[i].productPicInfo.picUrl+"\"></a></div>\n" +
+                        "                    <div class=\"goodsPri\"><a href=\'content.html?productId="+data[i].productId+"'\><em class=\"t16 verDana\">￥</em><i class=\"t20 verDana\">"+data[i].price+"</i></a></div>\n" +
+                        "                    <div class=\"goodsTxt\"><a href=\'content.html?productId="+data[i].productId+"'\>"+data[i].descript+"</a></div>\n" +
+                        "                    <div class=\"goodsEva\"><a href=\'content.html?productId="+data[i].productId+"'\ class=\"FB0 verDana fs\">"+data[i].num+"</a><a href=\"#\" class=\"a7\">条评价</a></div>\n" +
+                        "                    <div class=\"goodsPare\"><a href=\'content.html?productId="+data[i].productId+"'\ class=\"f9\">"+data[i].brandInfo.brandName+"</a></div>\n" +
+                        "                    <div class=\"goodsInSu\">\n" +
+                        "                        <a href=\"#\"><div class=\"goodsInSu1\">满减</div></a>\n" +
+                        "                        <a href=\"#\"><div class=\"goodsInSu2\">险</div></a>\n" +
+                        "                    </div>\n" +
+                        "                </div>\n" +
+                        "                <div class=\"goodsInfo0\"><a href=\'content.html?productId="+data[i+1].productId+"'\><img class=\"goodsPic\" src=\""+data[i+1].productPicInfo.picUrl+"\"></a>\n" +
+                        "                    <div class=\"goodsMinPic\"><a href=\'content.html?productId="+data[i+1].productId+"'\><img src=\""+data[i+1].productPicInfo.picUrl+"\"></a></div>\n" +
+                        "                    <div class=\"goodsPri\"><a href=\'content.html?productId="+data[i+1].productId+"'\><em class=\"t16 verDana\">￥</em><i class=\"t20 verDana\">"+data[i+1].price+"</i></a></div>\n" +
+                        "                    <div class=\"goodsTxt\"><a href=\'content.html?productId="+data[i+1].productId+"'\>"+data[i+1].descript+"</a></div>\n" +
+                        "                    <div class=\"goodsEva\"><a href=\'content.html?productId="+data[i+1].productId+"'\ class=\"FB0 verDana fs\">"+data[i+1].num+"</a><a href=\'test.html?productId="+data[i+1].productId+"'\ class=\"a7\">条评价</a></div>\n" +
+                        "                    <div class=\"goodsPare\"><a href=\'content.html?productId="+data[i+1].productId+"'\ class=\"f9\">"+data[i+1].brandInfo.brandName+"</a></div>\n" +
+                        "                    <div class=\"goodsInSu\">\n" +
+                        "                        <a href=\"#\"><div class=\"goodsInSu1\">满减</div></a>\n" +
+                        "                        <a href=\"#\"><div class=\"goodsInSu2\">险</div></a>\n" +
+                        "                    </div>\n" +
+                        "                </div>\n" +
+                        "                <div class=\"goodsInfo0\"><a href=\'content.html?productId="+data[i+2].productId+"'\><img class=\"goodsPic\" src=\""+data[i+2].productPicInfo.picUrl+"\"></a>\n" +
+                        "                    <div class=\"goodsMinPic\"><a href=\'content.html?productId="+data[i+2].productId+"'\><img src=\""+data[i+2].productPicInfo.picUrl+"\"></a></div>\n" +
+                        "                    <div class=\"goodsPri\"><a href=\'content.html?productId="+data[i+2].productId+"'\><em class=\"t16 verDana\">￥</em><i class=\"t20 verDana\">"+data[i+2].price+"</i></a></div>\n" +
+                        "                    <div class=\"goodsTxt\"><a href=\'content.html?productId="+data[i+2].productId+"'\>"+data[i+2].descript+"</a></div>\n" +
+                        "                    <div class=\"goodsEva\"><a href=\'content.html?productId="+data[i+2].productId+"'\ class=\"FB0 verDana fs\">"+data[i+2].num+"</a><a href=\'test.html?productId="+data[i+2].productId+"'\ class=\"a7\">条评价</a></div>\n" +
+                        "                    <div class=\"goodsPare\"><a href=\'content.html?productId="+data[i+2].productId+"'\ class=\"f9\">"+data[i+2].brandInfo.brandName+"</a></div>\n" +
+                        "                    <div class=\"goodsInSu\">\n" +
+                        "                        <a href=\"#\"><div class=\"goodsInSu1\">满减</div></a>\n" +
+                        "                        <a href=\"#\"><div class=\"goodsInSu2\">险</div></a>\n" +
+                        "                    </div>\n" +
+                        "                </div>\n" +
+                        "                <div class=\"goodsInfo0\"><a href=\'content.html?productId="+data[i+3].productId+"'\><img class=\"goodsPic\" src=\""+data[i+3].productPicInfo.picUrl+"\"></a>\n" +
+                        "                    <div class=\"goodsMinPic\"><a href=\'content.html?productId="+data[i+3].productId+"'\><img src=\""+data[i+3].productPicInfo.picUrl+"\"></a></div>\n" +
+                        "                    <div class=\"goodsPri\"><a href=\'content.html?productId="+data[i+3].productId+"'\><em class=\"t16 verDana\">￥</em><i class=\"t20 verDana\">"+data[i+3].price+"</i></a></div>\n" +
+                        "                    <div class=\"goodsTxt\"><a href=\'content.html?productId="+data[i+3].productId+"'\>"+data[i+1].descript+"</a></div>\n" +
+                        "                    <div class=\"goodsEva\"><a href=\'content.html?productId="+data[i+3].productId+"'\ class=\"FB0 verDana fs\">"+data[i+3].num+"</a><a href=\'test.html?productId="+data[i+3].productId+"'\ class=\"a7\">条评价</a></div>\n" +
+                        "                    <div class=\"goodsPare\"><a href=\'content.html?productId="+data[i+3].productId+"'\ class=\"f9\">"+data[i+3].brandInfo.brandName+"</a></div>\n" +
+                        "                    <div class=\"goodsInSu\">\n" +
+                        "                        <a href=\"#\"><div class=\"goodsInSu1\">满减</div></a>\n" +
+                        "                        <a href=\"#\"><div class=\"goodsInSu2\">险</div></a>\n" +
+                        "                    </div>\n" +
+                        "                </div>\n" +
+                        "                <div class=\"goodsInfo0\"><a href=\'content.html?productId="+data[i+4].productId+"'\><img class=\"goodsPic\" src=\""+data[i+4].productPicInfo.picUrl+"\"></a>\n" +
+                        "                    <div class=\"goodsMinPic\"><a href=\'content.html?productId="+data[i+4].productId+"'\><img src=\""+data[i+4].productPicInfo.picUrl+"\"></a></div>\n" +
+                        "                    <div class=\"goodsPri\"><a href=\'content.html?productId="+data[i+4].productId+"'\><em class=\"t16 verDana\">￥</em><i class=\"t20 verDana\">"+data[i+4].price+"</i></a></div>\n" +
+                        "                    <div class=\"goodsTxt\"><a href=\'content.html?productId="+data[i+4].productId+"'\>"+data[i+4].descript+"</a></div>\n" +
+                        "                    <div class=\"goodsEva\"><a href=\'content.html?productId="+data[i+4].productId+"'\ class=\"FB0 verDana fs\">"+data[i+4].num+"</a><a href=\'test.html?productId="+data[i+4].productId+"'\ class=\"a7\">条评价</a></div>\n" +
+                        "                    <div class=\"goodsPare\"><a href=\'content.html?productId="+data[i+4].productId+"'\ class=\"f9\">"+data[i+4].brandInfo.brandName+"</a></div>\n" +
+                        "                    <div class=\"goodsInSu\">\n" +
+                        "                        <a href=\"#\"><div class=\"goodsInSu1\">满减</div></a>\n" +
+                        "                        <a href=\"#\"><div class=\"goodsInSu2\">险</div></a>\n" +
+                        "                    </div>\n" +
+                        "                </div>\n" +
+                        "            </div>");
+                    $("#goodsInfoAll").append($div5);
+                }
+            }
+        }
+        //分类组合键
+        function b() {
+            getLevel1();
+            getLevel2();
+            getLevel1All();
+            getLevel2All();
+        }
+        //下一页
+        function c() {
+            pageNum++;
+            $.ajax({
+                url:"http://localhost:8080/getProductList",
+                type:"post",
+                data:{"pageNum":pageNum,
+                    "productName":likeSeTotal,
+                },
+                dataType:"json",
+                success:function (data) {
+                    if(data.length>0){
+                        $("#goodsInfoAll").children().remove();
+                        a(data);
+                    }else{
+                        pageNum--;
+                    }
+
+                }
+            })
+            $("#productTotal").children().remove();
+            $("#pageToTal1").children().remove();
+            $("#pageToTal2").children().remove();
+            $("#pageCurrent").children().remove();
+            getCountAndPaTalAndPageCurrent();
+        }
+        //上一页
+        function d() {
+            if(pageNum>1){
+                pageNum--;
+            $.ajax({
+                url:"http://localhost:8080/getProductList",
+                type:"post",
+                data:{"pageNum":pageNum,
+                    "productName":likeSeTotal,},
+                dataType:"json",
+                success:function (data) {
+                        $("#goodsInfoAll").children().remove();
+                        a(data);
+                }
+            })
+            }
+            getCountAndPaTalAndPageCurrent();
+        }
+        function getLevel1() {
+            var name=likeSeTotal;
+                $.ajax({
+                    url:"http://localhost:8080/getLevel1",
+                    data:{searchName:name},
+                    type:"post",
+                    dataType:"json",
+                    success:function (data) {
+                        $("#inSecCty a").remove();
+                            var $divLevel1=("<a href=\"#\">"+data.productCategoryList[0].categoryName+"</a>");
+                            $("#inSecCty").append($divLevel1);
+                        }
+                })
+        }
+        function getLevel2() {
+                var name=likeSeTotal;
+                $.ajax({
+                    url:"http://localhost:8080/getLevel2",
+                    data:{searchName:name},
+                    type:"post",
+                    dataType:"json",
+                    success:function (data) {
+                        $("#inTrdCty a").remove();
+                            var $divLevel2=("<a href=\"#\">"+data.productCategoryList[0].categoryName+"</a>");
+                            $("#inTrdCty").append($divLevel2);
+                    }
+                })
+            }
+        function getLevel1All() {
+                var name=likeSeTotal;
+                $.ajax({
+                    url:"http://localhost:8080/getLevel1All",
+                    data:{searchName:name},
+                    type:"post",
+                    dataType:"json",
+                    success:function (data) {
+                        console.log(data);
+                        $("#getLevel1All li").remove();
+                        for(var i=0;i<data.length;i++){
+                            var $divLevel2=("<li><a href=\"#\">"+data[i].productCategoryList[0].categoryName+"</a></li>");
+                            $("#getLevel1All").append($divLevel2);
+                        }
+                    }
+                })
+            }
+        function getLevel2All() {
+                var name=likeSeTotal;
+                $.ajax({
+                    url:"http://localhost:8080/getLevel2All",
+                    data:{searchName:name},
+                    type:"post",
+                    dataType:"json",
+                    success:function (data) {
+                        console.log(data);
+                        $("#getLevel2All li").remove();
+                        for(var i=0;i<data.length;i++){
+                            var $divLevel3=("<li><a href=\"#\">"+data[i].productCategoryList[0].categoryName+"</a></li>");
+                            $("#getLevel2All").append($divLevel3);
+                        }
+                    }
+                })
+            }
+        function getProductListAds() {
+            $.ajax({
+                url:"http://localhost:8080/getProductListAds",
+                type:"post",
+                dataType:"json",
+                success:function (data) {
+                    $("#inGoodsLeft").children().remove();
+                    for(var i=0;i<data.length;i++){
+                        var $divAds=("<li>\n" +
+                            "                    <div class=\"inGoodsLeft1\"><a href=\'content.html?productId="+data[i].productId+"'\><img src=\""+data[i].productPicInfo.picUrl+"\"></a></div>\n" +
+                            "                    <div><a href=\'content.html?productId="+data[i].productId+"'\><em class=\"E439 t16 verDana\">￥</em><i class=\"t20 verDana\">"+data[i].price+"</i></a></div>\n" +
+                            "                    <div><a href=\'content.html?productId="+data[i].productId+"'\>"+data[i].descript+"</a></div>\n" +
+                            "                    <div>已有<a href=\'content.html?productId="+data[i].productId+"'\ class=\"FB0 verDana fs\">"+data[i].num+"</a>人评价</div>\n" +
+                            "                </li>");
+                        $("#inGoodsLeft").append($divAds);
+                    }
+                }
+            })
+        }
+        function getProductList(){
+            $.ajax({
+                url:"http://localhost:8080/getProductList",
+                type:"post",
+                data:{
+                    "pageNum":pageNum,
+                    "productName":likeSeTotal,
+                },
+                dataType:"json",
+                success:function (data) {
+                    a(data);
+                }
+            })
+        }
+        //包含页码块
+        function getCountAndPaTalAndPageCurrent(){
+            $.ajax({
+                url:"http://localhost:8080/getCount",
+                type:"post",
+                dataType:"json",
+                success:function (data) {
+                    $("#pageNumDivs").children().remove();
+                    console.log(data);
+                    pageMax=data.pageTotal;
+                    //数据库页面小于7
+                    if(pageMax<=7){
+                        for(var i=1;i<pageMax+1;i++){
+                            $pageNumDiv=("<a href=\"#\"><li class=\"pageNum\">"+i+"</li></a>");
+                            $("#pageNumDivs").append($pageNumDiv);
+                        }
+                    }else{
+                        for(var i=pageNum;i<pageMax+1;i++){
+                            if(i-pageNum<=6){
+                                $pageNumDiv=("<a href=\"#\"><li class=\"pageNum\">"+i+"</li></a>");
+                                $("#pageNumDivs").append($pageNumDiv);
+                            }
+                        }
+                    }
+                    //页跳转后清除数据
+                    $("#productTotal").children().remove();
+                    $("#pageToTal1").children().remove();
+                    $("#pageToTal2").children().remove();
+                    $("#pageCurrent").children().remove();
+                    $divCount1=("<a><li class=\"f9 goodsTop3\">共<em class=\"f6\">"+data.count+"</em>件商品</li></a>");
+                    $("#productTotal").prepend($divCount1);
+                    $divCount2=("<span class=\"pageToTal\">"+data.pageTotal+"</span>");
+                    $("#pageToTal1").append($divCount2);
+                    $divCount3=("<li class=\"t14 f6\">共<em class=\"fs\">"+data.pageTotal+"页</em></li>");
+                    $("#pageToTal2").append($divCount3);
+                    $pageCurrent=("<em class=\"E439 fs\">"+pageNum+"</em>");
+                    $("#pageCurrent").prepend($pageCurrent);
+                }
+            })
+        }
+        //获取主页的搜索内容
+        function getUrlParam(name) {
+            var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)"); //构造一个含有目标参数的正则表达式对象
+            var r = window.location.search.substr(1).match(reg); //匹配目标参数
+            if (r != null) return unescape(r[2]); return null; //返回参数值
+        }
+        $(function () {
+            //显示购物车数量
+            var cId=sessionStorage.getItem("customerId");
+            $.ajax({
+                url:"http://localhost:8080/orderCartCount",
+                data:{customerId:cId},
+                type:"post",
+                dataType:"json",
+                success:function (data) {
+                    $("#orderCartCount").children().remove();
+                    $orderCC=("<span id=\"inOrderCartCount\">"+data+"</span>");
+                    $("#orderCartCount").append($orderCC);
+                }
+            });
+            //获取用户名
+            var loginName=sessionStorage.getItem("loginName");
+            $("#reg li:eq(0)").remove();
+            $("#reg li:eq(1)").remove();
+            $loName=("<li><a href=\"#\">您好，"+loginName+"</a></li>\n");
+            $("#reg").prepend($loName);
+            //获取主页的搜索内容
+            if(getUrlParam("productName")==null){
+                likeSeTotal ="牙刷";
+            }else{
+                likeSeTotal = decodeURI(getUrlParam("productName"),"UTF-8");
+            }
+            //点击哪页跳哪页
+            $("#pageNumDivs").on("click","li", function() {
+                pageNum=$(this).text();
+                    $.ajax({
+                        url:"http://localhost:8080/getProductList",
+                        type:"post",
+                        data:{"pageNum":pageNum,
+                            "productName":likeSeTotal,},
+                        dataType:"json",
+                        success:function (data) {
+                            $("#goodsInfoAll").children().remove();
+                            a(data);
+                        }
+                    })
+                    $("#productTotal").children().remove();
+                    $("#pageToTal1").children().remove();
+                    $("#pageToTal2").children().remove();
+                    $("#pageCurrent").children().remove();
+                    getCountAndPaTalAndPageCurrent();
+            });
+            getLevel1();
+            getLevel2();
+            getLevel1All();
+            getLevel2All();
+            //打开页面显示商品
+            getProductList();
+            //打开页面显示广告商品
+            getProductListAds();
+            //打开页面显示商品数目，当前页数和总页数
+            getCountAndPaTalAndPageCurrent();
+            //模糊搜索
+            $("input[type='text']").focus(function(){
+                $(this).val("");
+            })
+            $("#搜索").click(function () {
+                likeSeTotal=$("#searchAll").val();
+                $.ajax({
+                    url:"http://localhost:8080/likeSelect",
+                    data:{
+                        "pageNum":pageNum,
+                        "productName":$("#searchAll").val(),
+                    },
+                    dataType:"json",
+                    type:"post",
+                    // contentType:"application/json,charset-UTF-8",
+                    success:function (data){
+                        $("#goodsInfoAll").children().remove();
+                                a(data);
+                                b();
+                    }
+                })
+            })
+            //模糊搜索结果中再模糊搜索
+            $("#searchInTotal").click(function () {
+                $.ajax({
+                    url:"http://localhost:8080/likeSeTotal",
+                    data:{
+                        "pageNum":pageNum,
+                        "input":likeSeTotal,
+                        "productName":$("#textInTotal").val()
+                    },
+                    dataType:"json",
+                    type:"post",
+                    // contentType:"application/json,charset-UTF-8",
+                    success:function (data){
+                        console.log(data);
+                        $("#goodsInfoAll").children().remove();
+                        a(data);
+                    }
+                })
+            });
+            //评价排序
+            $("#goodsTopLeft li:eq(1)" ).click(function () {
+                $.ajax({
+                    url:"http://localhost:8080/orderBySalesVolume",
+                    data:{
+                        "input":likeSeTotal,
+                        "pageNum":pageNum
+                    },
+                    type:"post",
+                    dataType:"json",
+                    success:function (data) {
+                        console.log(data);
+                        $("#goodsInfoAll").children().remove();
+                        a(data);
+                    }
+                })
+            });
+            //销量排序
+            $("#goodsTopLeft li:eq(3)" ).click(function () {
+                $.ajax({
+                    url:"http://localhost:8080/orderByComment",
+                    data:{
+                        "input":likeSeTotal,
+                        "pageNum":pageNum
+                    },
+                    type:"post",
+                    dataType:"json",
+                    success:function (data) {
+                        console.log(data);
+                        $("#goodsInfoAll").children().remove();
+                        a(data);
+                    }
+                })
+            });
+            //价格排序
+            $("#goodsTopLeft li:eq(4)" ).click(function () {
+                $.ajax({
+                    url:"http://localhost:8080/orderByPrice",
+                    data:{
+                        "input":likeSeTotal,
+                        "pageNum":pageNum
+                    },
+                    type:"post",
+                    dataType:"json",
+                    success:function (data) {
+                        console.log(data);
+                        $("#goodsInfoAll").children().remove();
+                        a(data);
+                    }
+                })
+            });
+            //上一页
+            $("#prevAndNext li:first").click(function () {
+                d();
+            })
+            $("#prevPage").click(function () {
+                d();
+            })
+            //下一页
+            $("#prevAndNext li:last").click(function () {
+                c();
+            });
+            $("#nextPage").click(function () {
+                c();
+            })
+            //输入数字页面跳转
+            $("#pageJumpByNum").click(function () {
+                pageNum=$("#goodsPageText").val();
+                if(1<=pageNum&&pageNum<=pageMax){
+                    $.ajax({
+                        url:"http://localhost:8080/getProductList",
+                        type:"post",
+                        data:{"pageNum":pageNum,
+                            "productName":likeSeTotal},
+                        dataType:"json",
+                        success:function (data) {
+                            $("#goodsInfoAll").children().remove();
+                            a(data);
+                        }
+                    })
+                    $("#productTotal").children().remove();
+                    $("#pageToTal1").children().remove();
+                    $("#pageToTal2").children().remove();
+                    $("#pageCurrent").children().remove();
+                    getCountAndPaTalAndPageCurrent();
+                }else{
+                    alert("输入的页数错误，请重新输入！");
+                }
+            })
+        });
+    </script>
+</head>
+<body>
+<div id="top">
+    <div id="top1">
+        <div id="locReg">
+            <ul id="locUl">
+                <a href="#"><li id="house"></li></a>
+                <li id="house1"><a href="jd_index.html" id="houS" class="f9">京东首页</a></li>
+                <a href="#"><li id="workLoc"></li></a>
+                <li id="workLoc1"><a href="#" id="loc">福建</a></li>
+            </ul>
+            <ul id="reg">
+                <li><a href="#">您好，请登录</a></li>
+<!--                <li class="reg1"><a href="#">免费注册</a></li>-->
+<!--                <li class="space">I</li>-->
+                <li class="reg2"><a href="index.html">我的订单</a></li>
+                <li class="space">I</li>
+                <li class="reg3"><a href="#">我的京东</a></li>
+                <a href="#"><li class="下拉"></li></a>
+                <li class="space">I</li>
+                <li class="reg2"><a href="#">京东会员</a></li>
+                <li class="space">I</li>
+                <li class="reg3"><a href="#">企业采购</a></li>
+                <a href="#"><li class="下拉"></li></a>
+                <li class="space">I</li>
+                <li class="reg3"><a href="#">客户服务</a></li>
+                <a href="#"><li class="下拉"></li></a>
+                <li class="space">I</li>
+                <li class="reg3"><a href="#">网站导航</a></li>
+                <a href="#"><li class="下拉"></li></a>
+                <li class="space">I</li>
+                <li class="reg2"><a href="#">手机京东</a></li>
+            </ul>
+        </div>
+    </div>
+    <div id="top2">
+        <div id="imSh">
+            <div id="im分类">
+                <a href="#"><div id="im_jd"></div></a>
+                <a href="#" class="t14 FF"><div id="分类">全部商品分类</div></a>
+            </div>
+            <div id="search">
+                <div id="sear">
+                    <div id="formHot">
+                        <div id="form"><form>
+                            <input id="searchAll" name="搜索框" type="text" value="天猫精品" style="height:35px;width: 610px;margin-left: 5px;margin-top: 1px;outline: none" size="65px;">
+                            <a href="#"><img src="images/拍照.png" height="18px"></a>
+                            <a id="搜索" class="FF t16"><div id="红背景">搜索</div></a>
+                        </form></div>
+                        <div id="hotWords">
+                            <ul>
+                                <li><a href="#">盛夏焕新装</a></li>
+                                <li><a href="#">正品好药</a></li>
+                                <li><a href="#">空调钜惠</a></li>
+                                <li><a href="#">开关5折</a></li>
+                                <li><a href="#">美妆新品</a></li>
+                                <li><a href="#">鞋靴清仓</a></li>
+                                <li><a href="#">每100-50</a></li>
+                                <li><a href="#">纸品生活</a></li>
+                                <li><a href="#">养殖消毒</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                    <a href="cart.html"><div id="shopCar"><span id="orderCartCount"><span id="inOrderCartCount">0</span></span><img src="images/购物车.png">我的购物车</div></a>
+                </div>
+                <div id="text">
+                    <ul>
+                        <li><a href="#">京东时尚</a></li>
+                        <li><a href="#">美妆馆</a></li>
+                        <li><a href="#">超市生鲜</a></li>
+                        <li><a href="#">海囤全球</a></li>
+                        <li><a href="#">闪购</a></li>
+                        <li><a href="#">拍卖</a></li>
+                        <li><a href="#">金融</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div id="goodsType">
+    <div id="inGoodsType">
+        <ul id="secCty">
+            <li id="inSecCty"><a href="#">家居生活</a></li>
+            <span id="getLevel1All">
+            <li><a href="#">生活用品</a></li>
+            <li><a href="#">家具</a></li>
+            <li><a href="#">家电</a></li>
+            <li><a href="#">床上用品</a></li>
+            </span>
+        </ul>
+        <ul id="trdCty">
+            <li id="inTrdCty"><a href="#">家电</a></li>
+            <span id="getLevel2All">
+            <li><a href="#">电冰箱</a></li>
+            <li><a href="#">空调</a></li>
+            <li><a href="#">洗衣机</a></li>
+            <li><a href="#">电风扇</a></li>
+            <li><a href="#">电吹风</a></li>
+            </span>
+        </ul>
+    </div>
+</div>
+<div id="inGoods">
+    <div id="goods">
+        <div id="goodsLeft">
+            <div id="goodsLeftAds">
+                <div id="inGoodsLeftAds" class="t14 f6 fs">商品精选</div>
+                <div id="inGoodsLeftAdsTxt" class="t10">广告</div>
+            </div>
+            <ul id="inGoodsLeft">
+                <li>
+                    <div class="inGoodsLeft1"><a src="#"><img src="images/goods1.jpg"></a></div>
+                    <div><a src=""><em class="E439 t16 verDana">￥</em><i class="t20 verDana">2000</i></a></div>
+                    <div><a href="#">你的时间非常值钱</a></div>
+                    <div>已有<a href="#" class="FB0 verDana fs">3.8万+</a>人评价</div>
+                </li>
+<!--                <li>-->
+<!--                    <div class="inGoodsLeft1"><img src="images/goods1.jpg"></a></div>-->
+<!--                    <div><em class="E439 t16 verDana">￥</em><i class="t20 verDana">2000</i></div>-->
+<!--                    <div><a href="#">你的时间非常值钱</a></div>-->
+<!--                    <div>已有<a href="#" class="FB0 verDana fs">3.8万+</a>人评价</div>-->
+<!--                </li>-->
+            </ul>
+        </div>
+        <div id="goodsRight">
+            <div id="goodsTop">
+                <ul id="goodsTopLeft">
+                    <a href="#"><li class="goodsTop1">综合<img src="images/下.svg"></li></a>
+                    <a href="#"><li class="goodsTop1">销量<img src="images/下.svg"></li></a>
+                    <a href="#"><li class="goodsTop1">新品<img src="images/下.svg"></li></a>
+                    <a href="#"><li class="goodsTop1 goodsTopA">评论数<img src="images/下.svg"></li></a>
+                    <a href="#"><li class="goodsTop1 goodsTopB">价格<img src="images/上下.svg"></li></a>
+                    <a href="#"><li class="goodsTop2 goodsTopC"><input type="text" value="￥"></li></a>
+                    <a href="#"><li class="goodsTopD">-</li></a>
+                    <a href="#"><li class="goodsTop2"><input type="text" value="￥"></li></a>
+                </ul>
+                <ul id="goodsTopRight">
+                    <span id="productTotal"></span>
+                    <a><li class="f6 goodsTop3 verDana"><span id="pageCurrent"></span>/<span id="pageToTal1"></span></li></a>
+                    <a href="#"><li id="prevPage" class="f9 goodsTop4 t16 song"><</li></a>
+                    <a href="#"><li id="nextPage" class="f6 goodsTop4 t16 bgcF song">></li></a>
+                </ul>
+            </div>
+            <div id="goodsSearch"><input id="searchInTotal" type="button" value="确定"><input id="textInTotal" type="text" value="在结果中搜索"></div>
+            <div id="goodsInfoAll">
+            </div>
+            <div id="goodsPage">
+                <ul id="pageJump">
+                    <li class="t14 f6"><input id="pageJumpByNum" value="确定" type="button" style="width: 56px;height:40px;text-align: center;line-height: 38px"></li>
+                    <li class="t14 f6">到第<input id="goodsPageText" value="1" type="text" style="width: 36px;height:36px;text-align: center;line-height: 38px">页</li>
+                    <span id="pageToTal2"></span>
+                </ul>
+                <ul id="prevAndNext">
+                    <a href="#"><li class="preNex"><em><</em>上一页</li></a>
+                    <span id="pageNumDivs">
+                    <a href="#"><li class="pageNum">1</li></a>
+                    <a href="#"><li class="pageNum">2</li></a>
+                    <a href="#"><li class="pageNum">3</li></a>
+                    <a href="#"><li class="pageNum">4</li></a>
+                    <a href="#"><li class="pageNum">5</li></a>
+                    <a href="#"><li class="pageNum">6</li></a>
+                    <a href="#"><li class="pageNum">7</li></a>
+                    </span>
+                    <li class="pageNumZ">...</li>
+                    <a href="#"><li class="preNex preNex1">下一页<em>></em></li></a>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+<div id="inFooter">
+<div id="footer">
+    <div id="service-2014">
+        <div class="slogan">
+            <img src="images/service_items_1.png">
+            <img class="footerPic" src="images/service_items_2.png">
+            <img class="footerPic" src="images/service_items_3.png">
+            <img class="footerPic" src="images/service_items_4.png">
+        </div>
+        <div class="w">
+            <dl class="fore1">
+                <dt>购物指南</dt>
+                <dd>
+                    <div><a>购物流程</a>
+                    </div>
+                    <div><a>会员介绍</a>
+                    </div>
+                    <div><a>生活旅行/团购</a>
+                    </div>
+                    <div><a>常见问题</a></div>
+                    <div><a>大家电</a>
+                    </div>
+                    <div><a>联系客服</a></div>
+                </dd>
+            </dl>
+            <dl class="fore">
+                <dt>配送方式</dt>
+                <dd>
+                    <div><a>上门自提</a>
+                    </div>
+                    <div><a>211限时达</a>
+                    </div>
+                    <div><a>配送服务查询</a>
+                    </div>
+                    <div><a>配送费收取标准</a>
+                    </div>
+                    <div><a>海外配送</a></div>
+                </dd>
+            </dl>
+            <dl class="fore">
+                <dt>支付方式</dt>
+                <dd>
+                    <div><a>货到付款</a>
+                    </div>
+                    <div><a>在线支付</a>
+                    </div>
+                    <div><a>分期付款</a>
+                    </div>
+                    <div><a>邮局汇款</a>
+                    </div>
+                    <div><a>公司转账</a>
+                    </div>
+                </dd>
+            </dl>
+            <dl class="fore">
+                <dt>售后服务</dt>
+                <dd>
+                    <div><a>售后政策</a>
+                    </div>
+                    <div><a>价格保护</a>
+                    </div>
+                    <div><a>退款说明</a>
+                    </div>
+                    <div><a>返修/退换货</a>
+                    </div>
+                    <div><a>取消订单</a>
+                    </div>
+                </dd>
+            </dl>
+            <dl class="fore">
+                <dt>特色服务</dt>
+                <dd>
+                    <div><a >夺宝岛</a></div>
+                    <div><a >DIY装机</a></div>
+                    <div><a >延保服务</a></div>
+                    <div><a >京东E卡</a></div>
+                    <div><a >京东通信</a></div>
+                    <div><a >京东JD+</a></div>
+                </dd>
+            </dl>
+            <span class="clr"></span>
+        </div>
+    </div>
+    <div class="copyright">
+        <a target="_blank" href=""><img src="images/ga.png"> 京公网安备11000002000088号</a>&nbsp;&nbsp;|&nbsp;&nbsp;京ICP证070359号&nbsp;&nbsp;|&nbsp;&nbsp;
+        <a target="_blank" href="">互联网药品信息服务资格证编号(京)-经营性-2014-0008</a>&nbsp;&nbsp;|&nbsp;&nbsp;新出发京零&nbsp;字第大120007号<br>互联网出版许可证编号新出网证(京)字150号&nbsp;&nbsp;|&nbsp;&nbsp;
+        <a href="" target="_blank">出版物经营许可证</a>&nbsp;&nbsp;|&nbsp;&nbsp;<a href="" target="_blank">网络文化经营许可证京网文[2014]2148-348号</a>&nbsp;&nbsp;|&nbsp;&nbsp;违法和不良信息举报电话：4006561155<br>Copyright&nbsp;©&nbsp;2004&nbsp;-&nbsp;2016&nbsp;&nbsp;京东JD.com&nbsp;版权所有&nbsp;&nbsp;|&nbsp;&nbsp;消费者维权热线：4006067733<br>京东旗下网站：<a href="" target="_blank">京东钱包</a>
+    </div>
+</div>
+</div>
+</body>
+</html>
